@@ -548,6 +548,7 @@ function init() {
                 Airing schedule;Calendario de emisión;Calendrier de diffusion;Programma di messa in onda;Sendeplan;Cronograma de exibição;放送スケジュール;방송 일정;放送时间表
                 Open page;Abrir página;Ouvrir la page;Apri pagina;Seite öffnen;Abrir página;ページを開く;페이지 열기;打开页面
                 airing at;emitiéndose a;diffusé à;in onda alle;wird ausgestrahlt um;exibindo às;放送時間;방송 시간;播出于
+                Translates Seanime UI into 9 different languages.;Traduce la interfaz de Seanime a 9 idiomas diferentes.;Traduit l'interface de Seanime en 9 langues différentes.;Traduce l'interfaccia di Seanime in 9 lingue diverse.;Übersetzt die Seanime-Oberfläche in 9 verschiedene Sprachen.;Traduz a interface do Seanime para 9 idiomas diferentes.;SeanimeのUIを9つの言語に翻訳します。;Seanime UI를 9가지 언어로 번역합니다.;将Seanime界面翻译成9种语言。
         `;
 
         // --- 📦 Parser CSV robusto (soporta ; , y comillas) ---
