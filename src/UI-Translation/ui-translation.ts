@@ -599,7 +599,7 @@ function init() {
         // --- 🧠 UI tray ---
         const tray = ctx.newTray({
             tooltipText: "UI Translator",
-            iconUrl: "https://seanime.rahim.app/logo_2.png",
+            iconUrl: "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/UI-Translation/icon.png",
             withContent: true,
         });
 
