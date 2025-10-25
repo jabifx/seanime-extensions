@@ -58,13 +58,20 @@ class Provider {
     parseSubtitles(data: any): VideoSubtitle[] {
         if (!data || !Array.isArray(data.subtitles)) return [];
 
-        return data.subtitles.map((s: any) => ({
-            id: s.language,
-            url: `https://asstovtt.jaiet7.workers.dev/?url=${encodeURIComponent(s.url)}`,
-            language: s.languageName + " - " + s.title,
-            isDefault: s.is_default ?? false,
-        }));
+        return data.subtitles.map((s: any) => {
+            const cleanLang = (s.language_name ?? "")
+                .replace(/^Language\s*\(|\)$/g, "") // quita "Language (" y ")"
+                .trim();
+
+            return {
+                id: cleanLang,
+                url: `https://asstovtt.jaiet7.workers.dev/?url=${encodeURIComponent(s.url)}`,
+                language: `${cleanLang} - ${s.title ?? ""}`,
+                isDefault: s.is_default ?? false,
+            };
+        });
     }
+
 
     async findEpisodeServer(episodeOrId: any, serverName: string): Promise<EpisodeServer> {
         const headers = {
