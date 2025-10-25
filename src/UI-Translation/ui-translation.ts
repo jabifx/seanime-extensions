@@ -90,7 +90,7 @@ function init() {
         days;días;jours;giorni;Tage;dias;日間;일;天
         Add to list;Agregar a la lista;Ajouter à la liste;Aggiungi alla lista;Zur Liste hinzufügen;Adicionar à lista;リストに追加;목록에 추가;添加到列表
         Releasing now;En emisión ahora;En diffusion maintenant;In uscita ora;Läuft gerade;Transmitindo agora;現在放送中;현재 방영 중;正在连载
-        Episode;Episodio;Épisode;Episode;Episode;Episódio;エピソード;에피소드;剧集
+        Episode;Episodio;Épisode;Episodi;Episode;Episódio;エピソード;에피소드;剧集
         Episodes;Episodios;Épisodes;Episodi;Episoden;Episódios;エピソード;에피소드;剧集
         released;lanzados;sorti;rilasciati;veröffentlicht;lançado;リリースされた;출시됨;发布All;
         Todo;Tout;Tutti;Alle;Tudo;すべて;전체;全部
