@@ -59,9 +59,9 @@ class Provider {
         if (!data || !Array.isArray(data.subtitles)) return [];
 
         return data.subtitles.map((s: any) => ({
-            id: s.languageName + " - " + s.title,
+            id: s.language,
             url: `https://asstovtt.jaiet7.workers.dev/?url=${encodeURIComponent(s.url)}`,
-            language: s.language,
+            language: s.languageName + " - " + s.title,
             isDefault: s.is_default ?? false,
         }));
     }
