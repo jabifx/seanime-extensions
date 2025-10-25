@@ -8,6 +8,6 @@
   "description": "Online streaming provider with soft/hard subs and dubs mainly in Italian.",
   "author": "jabifx",
   "lang": "it",
-  "icon": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AniDream/icon.ico",
+  "icon": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AniDream/icon.jpg",
   "payloadURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AniDream/main.ts"
 }
