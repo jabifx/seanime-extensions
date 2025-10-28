@@ -5,7 +5,7 @@
   "manifestURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeThemes/manifest.json",
   "language": "typescript",
   "type": "plugin",
-  "description": "Displays an anime’s openings (using animethemes.moe) and endings directly on its page.",
+  "description": "Displays an anime’s openings and endings (using animethemes.moe) directly on its page.",
   "author": "jabifx",
   "icon": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeThemes/icon.ico",
   "website": "",
