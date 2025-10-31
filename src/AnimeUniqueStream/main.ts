@@ -5,7 +5,7 @@ class Provider {
 
     getSettings(): Settings {
         return {
-            episodeServers: ["Default", "Zen"],
+            episodeServers: ["Default"],
             supportsDub: true,
         }
     }
@@ -164,7 +164,6 @@ class Provider {
                 "accept": "*/*",
                 "accept-encoding": "gzip, deflate, br, zstd",
                 "accept-language": "es-ES,es;q=0.9",
-                "origin": "https://anime.uniquestream.net",
                 "referer": "https://anime.uniquestream.net/",
                 "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36"
             },

@@ -138,8 +138,8 @@ class Provider {
             'ru': 'ru',
             'ko': 'ko',
             'zh': 'zh',
-            'zh-cn': 'zh-CN',
-            'zh-tw': 'zh-TW',
+            'zh-cn': 'zh-cn',
+            'zh-tw': 'zh-tw',
             'ar': 'ar',
             'tr': 'tr',
         };
