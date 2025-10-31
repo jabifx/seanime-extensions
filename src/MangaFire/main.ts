@@ -15,7 +15,6 @@ class Provider {
         const data = await res.json();
 
         if (!data?.result?.html) return [];
-        console.log(data.result?.html);
 
         const $ = LoadDoc(data.result.html);
 
@@ -31,7 +30,7 @@ class Provider {
                 year: 1,
                 image
             };
-        }).get();
+        });
 
     }
 
@@ -122,8 +121,6 @@ class Provider {
         langChapters.reverse();
         langChapters.forEach((ch, i) => (ch.index = i));
 
-        console.log("[Chapters]", JSON.stringify(langChapters, null, 2))
-
         return langChapters;
     }
 
@@ -134,7 +131,7 @@ class Provider {
             'es': 'es',
             'es-la': 'es-419',
             'pt': 'pt',
-            'pt-br': 'pt-BR',
+            'pt-br': 'pt-br',
             'ja': 'ja',
             'de': 'de',
             'it': 'it',
