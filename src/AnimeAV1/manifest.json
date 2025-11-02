@@ -5,7 +5,7 @@
   "manifestURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeAV1/manifest.json",
   "language": "typescript",
   "type": "onlinestream-provider",
-  "description": ".",
+  "description": "Online streaming provider with hard subs and dubs in Spanish.",
   "author": "jabifx",
   "icon": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeAV1/icon.png",
   "lang": "es",
