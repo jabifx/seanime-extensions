@@ -85,7 +85,7 @@ class Provider {
             throw new Error(`No se encontró ningún embed de ZillaNetworks en ${_server}.`);
 
         return {
-            server: "ZillaNetworks",
+            server: _server,
             headers: {},
             videoSources: [
                 {
