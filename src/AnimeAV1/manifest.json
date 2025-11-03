@@ -9,5 +9,5 @@
   "author": "jabifx",
   "icon": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeAV1/icon.png",
   "lang": "es",
-  "payloadURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/refs/heads/master/src/AnimeAV1/main.ts"
+  "payloadURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeAV1/main.ts"
 }
