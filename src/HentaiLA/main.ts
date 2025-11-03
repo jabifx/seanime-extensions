@@ -82,7 +82,6 @@ class Provider {
         if (!embeds)
             throw new Error("No se encontraron 'embeds' en los datos del episodio.");
 
-        // elegir lista según el parámetro _server
         let selectedEmbeds: any[] = [];
 
         selectedEmbeds = embeds.SUB ?? [];
@@ -98,7 +97,7 @@ class Provider {
 
         return {
             Server: 'hvidserv',
-            headers: {},
+            headers: {Referer: 'null'},
             videoSources: [
                 {
                     url: finalUrl,
