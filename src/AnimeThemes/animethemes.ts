@@ -9,24 +9,20 @@ function init() {
             withContent: true,
         })
 
-        const startMinimizedRef = ctx.fieldRef<boolean>(startMinimized)
-        const autoplayRef = ctx.fieldRef<boolean>(autoplay)
+        const startMinimizedRef = ctx.fieldRef(startMinimized)
+        const autoplayRef = ctx.fieldRef(autoplay)
+
+        ctx.registerEventHandler("save-player-settings", () => {
+            $storage.set("anime-player.startMinimized", startMinimizedRef.current)
+            $storage.set("anime-player.autoplay", autoplayRef.current)
+            ctx.toast.success("Settings saved successfully!")
+        })
+
 
         const startMinimizedState = ctx.state(startMinimized)
-
         ctx.setInterval(() => {
             startMinimizedState.set(startMinimizedRef.current)
         }, 100)
-
-        ctx.registerEventHandler("save-player-settings", () => {
-            const newStartMinimized = startMinimizedRef.current
-            const newAutoplay = autoplayRef.current
-
-            $storage.set("anime-player.startMinimized", newStartMinimized)
-            $storage.set("anime-player.autoplay", newAutoplay)
-
-            ctx.toast.success("Settings saved successfully!")
-        })
 
         tray.render(() => {
             const isMinimized = startMinimizedState.get()
@@ -40,12 +36,14 @@ function init() {
                         fieldRef: startMinimizedRef,
                         help: "Start the player in minimized mode"
                     }),
-                    !isMinimized ? tray.switch("Autoplay", {
-                        fieldRef: autoplayRef,
-                        help: "Automatically play themes when selected"
-                    }) : tray.text("Autoplay is disabled when starting minimized", {
-                        style: { fontSize: "11px", color: "#9ca3af", fontStyle: "italic" }
-                    }),
+                    !isMinimized
+                        ? tray.switch("Autoplay", {
+                            fieldRef: autoplayRef,
+                            help: "Automatically play themes when selected"
+                        })
+                        : tray.text("Autoplay is disabled when starting minimized", {
+                            style: { fontSize: "11px", color: "#9ca3af", fontStyle: "italic" }
+                        }),
                     tray.button("Save Settings", {
                         onClick: "save-player-settings",
                         intent: "primary-subtle"
@@ -57,7 +55,9 @@ function init() {
 
         ctx.dom.onReady(async () => {
             ctx.screen.onNavigate(async (e) => {
-                if (e.pathname !== "/entry") {
+                const isEntry = e.pathname === "/entry"
+
+                if (!isEntry) {
                     const existingPlayer = await ctx.dom.queryOne("#anime-theme-player")
                     if (existingPlayer) await existingPlayer.remove()
 
@@ -68,28 +68,23 @@ function init() {
                 }
 
                 const anilistId = e.searchParams?.id
-                if (!anilistId) {
-                    console.log("No AniList ID found in params")
-                    return
-                }
+                if (!anilistId) return
 
                 try {
-
-                    const alreadyActive = await ctx.dom.queryOne("script[data-anime-player]")
-                    if (alreadyActive) return
                     const body = await ctx.dom.queryOne("body")
-                    const script = await ctx.dom.createElement("script")
-                    script.setAttribute("data-anime-player", "true")
+                    if (!body) return
 
                     const savedStartMinimized = $storage.get("anime-player.startMinimized") ?? false
                     const savedAutoplay = $storage.get("anime-player.autoplay") ?? true
-
                     const effectiveAutoplay = savedStartMinimized ? false : savedAutoplay
 
+                    const oldScript = await ctx.dom.queryOne("script[data-anime-player]")
+                    if (oldScript) await oldScript.remove()
+
+                    const script = await ctx.dom.createElement("script")
+                    script.setAttribute("data-anime-player", "true")
                     script.setText(`
                       (function() {
-                        if (window.__ANIME_PLAYER_ACTIVE__) return;
-                        window.__ANIME_PLAYER_ACTIVE__ = true;
                         const ANILIST_ID = "${anilistId}";
                         const START_MINIMIZED = ${savedStartMinimized};
                         const AUTOPLAY = ${effectiveAutoplay};
