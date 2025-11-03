@@ -86,7 +86,7 @@ class Provider {
 
         return {
             server: _server,
-            headers: {},
+            headers: {Referer: 'null'},
             videoSources: [
                 {
                     url: match.url.replace("/play/", "/m3u8/"),
