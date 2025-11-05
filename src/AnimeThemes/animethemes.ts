@@ -3,6 +3,8 @@ function init() {
         const startMinimized = $storage.get("anime-player.startMinimized") ?? false
         const autoplay = $storage.get("anime-player.autoplay") ?? true
 
+        let isAnimePlayerInjected = false
+
         const tray = ctx.newTray({
             tooltipText: "Anime Themes",
             iconUrl: "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeThemes/icon.ico",
@@ -64,8 +66,17 @@ function init() {
                     const existingScripts = await ctx.dom.query('script[data-anime-player]')
                     for (const s of existingScripts) await s.remove()
 
+                    isAnimePlayerInjected = false
+
                     return
                 }
+
+
+                if (isAnimePlayerInjected) {
+                    console.log("Anime Player ya inyectado, saltando...")
+                    return
+                }
+                isAnimePlayerInjected = true
 
                 const anilistId = e.searchParams?.id
                 if (!anilistId) return
@@ -78,8 +89,12 @@ function init() {
                     const savedAutoplay = $storage.get("anime-player.autoplay") ?? true
                     const effectiveAutoplay = savedStartMinimized ? false : savedAutoplay
 
-                    const oldScript = await ctx.dom.queryOne("script[data-anime-player]")
-                    if (oldScript) await oldScript.remove()
+                    const oldScripts = await ctx.dom.query("script[data-anime-player]")
+                    for (const s of oldScripts) await s.remove()
+
+                    const oldPlayers = await ctx.dom.query("#anime-theme-player")
+                    for (const p of oldPlayers) await p.remove()
+
 
                     const script = await ctx.dom.createElement("script")
                     script.setAttribute("data-anime-player", "true")
