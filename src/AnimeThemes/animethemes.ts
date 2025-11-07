@@ -1,52 +1,57 @@
 function init() {
     $ui.register((ctx) => {
-        const startMinimized = $storage.get("anime-player.startMinimized") ?? false
-        const autoplay = $storage.get("anime-player.autoplay") ?? true
-        const defaultProvider = $storage.get("anime-player.provider") ?? "animethemes"
-        const initialVolume = $storage.get("anime-player.volume") ?? 0.7
+        const startMinimized = $storage.get("anime-player.startMinimized") ?? false;
+        const autoplay = $storage.get("anime-player.autoplay") ?? true;
+        const defaultProvider =
+            $storage.get("anime-player.provider") ?? "animethemes";
+        const initialVolume = $storage.get("anime-player.volume") ?? 0.7;
 
-        let isAnimePlayerInjected = false
+        let isAnimePlayerInjected = false;
 
         const tray = ctx.newTray({
             tooltipText: "Anime Themes",
-            iconUrl: "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeThemes/icon.ico",
+            iconUrl:
+                "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeThemes/icon.ico",
             withContent: true,
-        })
+        });
 
-        const startMinimizedRef = ctx.fieldRef(startMinimized)
-        const autoplayRef = ctx.fieldRef(autoplay)
-        const providerRef = ctx.fieldRef(defaultProvider)
-        const volumeRef = ctx.fieldRef(initialVolume)
+        const startMinimizedRef = ctx.fieldRef(startMinimized);
+        const autoplayRef = ctx.fieldRef(autoplay);
+        const providerRef = ctx.fieldRef(defaultProvider);
+        const volumeRef = ctx.fieldRef(initialVolume);
 
         ctx.registerEventHandler("save-player-settings", () => {
-            $storage.set("anime-player.startMinimized", startMinimizedRef.current)
-            $storage.set("anime-player.autoplay", autoplayRef.current)
-            $storage.set("anime-player.provider", providerRef.current)
-            $storage.set("anime-player.volume", volumeRef.current)
-            ctx.toast.success("Settings saved successfully!")
-        })
+            $storage.set("anime-player.startMinimized", startMinimizedRef.current);
+            $storage.set("anime-player.autoplay", autoplayRef.current);
+            $storage.set("anime-player.provider", providerRef.current);
+            $storage.set("anime-player.volume", volumeRef.current);
+            ctx.toast.success("Settings saved successfully!");
+        });
 
-
-        const startMinimizedState = ctx.state(startMinimized)
+        const startMinimizedState = ctx.state(startMinimized);
         ctx.setInterval(() => {
-            startMinimizedState.set(startMinimizedRef.current)
-        }, 100)
+            startMinimizedState.set(startMinimizedRef.current);
+        }, 100);
 
         tray.render(() => {
-            const isMinimized = startMinimizedState.get()
+            const isMinimized = startMinimizedState.get();
 
             return tray.stack({
                 items: [
                     tray.text("Anime Theme Player Settings", {
-                        style: { fontWeight: "bold", fontSize: "14px", marginBottom: "8px" }
+                        style: {
+                            fontWeight: "bold",
+                            fontSize: "14px",
+                            marginBottom: "8px",
+                        },
                     }),
                     tray.select("Provider", {
                         fieldRef: providerRef,
                         options: [
                             { label: "AnimeThemes", value: "animethemes" },
-                            { label: "AniSongDB", value: "anisongdb" }
+                            { label: "AniSongDB", value: "anisongdb" },
                         ],
-                        help: "Choose the theme provider"
+                        help: "Choose the theme provider",
                     }),
                     tray.select("Initial Volume", {
                         fieldRef: volumeRef,
@@ -57,74 +62,80 @@ function init() {
                             { label: "70%", value: 0.7 },
                             { label: "90%", value: 0.9 },
                             { label: "100%", value: 1 },
-                        ]
+                        ],
                     }),
                     tray.switch("Start Minimized", {
                         fieldRef: startMinimizedRef,
-                        help: "Start the player in minimized mode"
+                        help: "Start the player in minimized mode",
                     }),
                     !isMinimized
                         ? tray.switch("Autoplay", {
                             fieldRef: autoplayRef,
-                            help: "Automatically play themes when selected"
+                            help: "Automatically play themes when selected",
                         })
                         : tray.text("Autoplay is disabled when starting minimized", {
-                            style: { fontSize: "11px", color: "#9ca3af", fontStyle: "italic" }
+                            style: {
+                                fontSize: "11px",
+                                color: "#9ca3af",
+                                fontStyle: "italic",
+                            },
                         }),
                     tray.button("Save Settings", {
                         onClick: "save-player-settings",
-                        intent: "primary-subtle"
+                        intent: "primary-subtle",
                     }),
                 ],
-                style: { gap: "12px", padding: "8px" }
-            })
-        })
+                style: { gap: "12px", padding: "8px" },
+            });
+        });
 
         ctx.dom.onReady(async () => {
             ctx.screen.onNavigate(async (e) => {
-                const isEntry = e.pathname === "/entry"
+                const isEntry = e.pathname === "/entry";
 
                 if (!isEntry) {
-                    const existingPlayer = await ctx.dom.queryOne("#anime-theme-player")
-                    if (existingPlayer) await existingPlayer.remove()
+                    const existingPlayer = await ctx.dom.queryOne("#anime-theme-player");
+                    if (existingPlayer) await existingPlayer.remove();
 
-                    const existingScripts = await ctx.dom.query('script[data-anime-player]')
-                    for (const s of existingScripts) await s.remove()
+                    const existingScripts = await ctx.dom.query(
+                        "script[data-anime-player]",
+                    );
+                    for (const s of existingScripts) await s.remove();
 
-                    isAnimePlayerInjected = false
+                    isAnimePlayerInjected = false;
 
-                    return
+                    return;
                 }
-
 
                 if (isAnimePlayerInjected) {
-                    console.log("Anime Player ya inyectado, saltando...")
-                    return
+                    console.log("Anime Player ya inyectado, saltando...");
+                    return;
                 }
-                isAnimePlayerInjected = true
+                isAnimePlayerInjected = true;
 
-                const anilistId = e.searchParams?.id
-                if (!anilistId) return
+                const anilistId = e.searchParams?.id;
+                if (!anilistId) return;
 
                 try {
-                    const body = await ctx.dom.queryOne("body")
-                    if (!body) return
+                    const body = await ctx.dom.queryOne("body");
+                    if (!body) return;
 
-                    const savedStartMinimized = $storage.get("anime-player.startMinimized") ?? false
-                    const savedAutoplay = $storage.get("anime-player.autoplay") ?? true
-                    const savedProvider = $storage.get("anime-player.provider") ?? "animethemes"
-                    const savedVolume = $storage.get("anime-player.volume") ?? 0.7
-                    const effectiveAutoplay = savedStartMinimized ? false : savedAutoplay
+                    const savedStartMinimized =
+                        $storage.get("anime-player.startMinimized") ?? false;
+                    const savedAutoplay = $storage.get("anime-player.autoplay") ?? true;
+                    const savedProvider =
+                        $storage.get("anime-player.provider") ?? "animethemes";
+                    const savedVolume = $storage.get("anime-player.volume") ?? 0.7;
+                    const effectiveAutoplay = savedStartMinimized ? false : savedAutoplay;
 
-                    const oldScripts = await ctx.dom.query("script[data-anime-player]")
-                    for (const s of oldScripts) await s.remove()
+                    const oldScripts = await ctx.dom.query("script[data-anime-player]");
+                    for (const s of oldScripts) await s.remove();
 
-                    const oldPlayers = await ctx.dom.query("#anime-theme-player")
-                    for (const p of oldPlayers) await p.remove()
+                    const oldPlayers = await ctx.dom.query("#anime-theme-player");
+                    for (const p of oldPlayers) await p.remove();
 
-
-                    const script = await ctx.dom.createElement("script")
-                    script.setAttribute("data-anime-player", "true")
+                    const script = await ctx.dom.createElement("script");
+                    script.setAttribute("data-anime-player", "true");
                     script.setText(`
                       (function() {
                         const ANILIST_ID = "${anilistId}";
@@ -224,45 +235,7 @@ function init() {
                             player.classList.remove("dragging");
                           }
                         });
-
-                        function levenshteinDistance(a, b) {
-                          const matrix = [];
-                          for (let i = 0; i <= b.length; i++) {
-                            matrix[i] = [i];
-                          }
-                          for (let j = 0; j <= a.length; j++) {
-                            matrix[0][j] = j;
-                          }
-                          for (let i = 1; i <= b.length; i++) {
-                            for (let j = 1; j <= a.length; j++) {
-                              if (b.charAt(i - 1) === a.charAt(j - 1)) {
-                                matrix[i][j] = matrix[i - 1][j - 1];
-                              } else {
-                                matrix[i][j] = Math.min(
-                                  matrix[i - 1][j - 1] + 1,
-                                  matrix[i][j - 1] + 1,
-                                  matrix[i - 1][j] + 1
-                                );
-                              }
-                            }
-                          }
-                          return matrix[b.length][a.length];
-                        }
-
-                        function isSimilarTitle(title1, title2) {
-                          const t1 = title1.toLowerCase().trim();
-                          const t2 = title2.toLowerCase().trim();
-                          
-                          if (t1 === t2) return true;
-                          if (t1.includes(t2) || t2.includes(t1)) return true;
-                          
-                          const distance = levenshteinDistance(t1, t2);
-                          const maxLen = Math.max(t1.length, t2.length);
-                          const similarity = 1 - (distance / maxLen);
-                          
-                          return similarity > 0.7;
-                        }
-                
+                        
                         async function fetchThemes() {
                           try {
                             if (PROVIDER === "animethemes") {
@@ -308,63 +281,133 @@ function init() {
                                 themesList.innerHTML = '<div class="error">Anime not found on Animethemes</div>';
                               }
                             } else if (PROVIDER === "anisongdb") {
-                              // Get anime title first from AnimeThemes API
-                              const anilistResponse = await fetch(
-                                \`https://api.animethemes.moe/anime?filter[has]=resources&filter[site]=AniList&filter[external_id]=\${ANILIST_ID}\`
-                              );
-                              const anilistData = await anilistResponse.json();
-                              
-                              if (!anilistData.anime || anilistData.anime.length === 0) {
-                                themesList.innerHTML = '<div class="error">Anime not found</div>';
-                                return;
-                              }
-                              
-                              const animeData = anilistData.anime[0];
-                              animeTitle = animeData.name;
-                              
-                              if (animeTitleEl) {
-                                animeTitleEl.textContent = animeData.name;
-                              }
-                              
-                              const response = await fetch("https://anisongdb.com/api/search_request", {
-                                method: "POST",
-                                headers: {
-                                  "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({
-                                  "anime_search_filter": {
-                                    "search": animeData.name,
-                                    "partial_match": true
+                              // Get anime title (prefer first season) directly from AniList
+                                const query = \`
+                                  query ($id: Int) {
+                                    Media(id: $id, type: ANIME) {
+                                      id
+                                      title {
+                                        romaji
+                                        english
+                                        native
+                                      }
+                                      startDate {
+                                        year
+                                      }
+                                      relations {
+                                        edges {
+                                          relationType
+                                          node {
+                                            id
+                                            title {
+                                              romaji
+                                              english
+                                              native
+                                            }
+                                            startDate {
+                                              year
+                                            }
+                                            type
+                                          }
+                                        }
+                                      }
+                                    }
+                                  }
+                                \`;
+                                
+                                const parsedId = Number(ANILIST_ID);
+                                if (isNaN(parsedId)) {
+                                  themesList.innerHTML = '<div class="error">Invalid AniList ID</div>';
+                                  return;
+                                }
+                                
+                                const responseAniList = await fetch("https://graphql.anilist.co", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                    "Accept": "application/json"
                                   },
-                                  "song_name_search_filter": {
-                                    "search": animeData.name,
-                                    "partial_match": true
+                                  body: JSON.stringify({
+                                    query,
+                                    variables: { id: parsedId }
+                                  })
+                                });
+                                
+                                const json = await responseAniList.json();
+                                if (!json.data?.Media) {
+                                  themesList.innerHTML = '<div class="error">Anime not found on AniList</div>';
+                                  console.error(json);
+                                  return;
+                                }
+                                
+                                const media = json.data.Media;
+                                
+                                // Buscar el prequel más antiguo (primera temporada)
+                                let titleData = media.title;
+                                if (media.relations?.edges?.length) {
+                                  const prequels = media.relations.edges
+                                    .filter(e => e.relationType === "PREQUEL" && e.node.type === "ANIME")
+                                    .map(e => e.node);
+                                
+                                  if (prequels.length > 0) {
+                                    prequels.sort((a, b) => (a.startDate?.year || 9999) - (b.startDate?.year || 9999));
+                                    titleData = prequels[0].title;
+                                  }
+                                }
+                                
+                                animeTitle = titleData.romaji || titleData.english || titleData.native;
+                                if (animeTitleEl) animeTitleEl.textContent = animeTitle;
+
+                              
+                              if (!animeTitle) {
+                                  themesList.innerHTML = '<div class="error">Anime not found</div>';
+                                  return;
+                                }
+                                
+                                if (animeTitleEl) {
+                                  animeTitleEl.textContent = animeTitle;
+                                }
+                                
+                                const response = await fetch("https://anisongdb.com/api/search_request", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json"
                                   },
-                                  "artist_search_filter": {
-                                    "search": animeData.name,
-                                    "partial_match": true,
-                                    "group_granularity": 0,
-                                    "max_other_artist": 99
-                                  },
-                                  "composer_search_filter": {
-                                    "search": animeData.name,
-                                    "partial_match": true,
-                                    "arrangement": true
-                                  },
-                                  "and_logic": false,
-                                  "ignore_duplicate": false,
-                                  "opening_filter": true,
-                                  "ending_filter": true,
-                                  "insert_filter": true,
-                                  "normal_broadcast": true,
-                                  "dub": true,
-                                  "rebroadcast": true,
-                                  "standard": true,
-                                  "instrumental": true,
-                                  "chanting": true,
-                                  "character": true
-                                })
-                              });
+                                  body: JSON.stringify({
+                                    "anime_search_filter": {
+                                      "search": animeTitle,
+                                      "partial_match": true
+                                    },
+                                    "song_name_search_filter": {
+                                      "search": animeTitle,
+                                      "partial_match": true
+                                    },
+                                    "artist_search_filter": {
+                                      "search": animeTitle,
+                                      "partial_match": true,
+                                      "group_granularity": 0,
+                                      "max_other_artist": 99
+                                    },
+                                    "composer_search_filter": {
+                                      "search": animeTitle,
+                                      "partial_match": true,
+                                      "arrangement": true
+                                    },
+                                    "and_logic": false,
+                                    "ignore_duplicate": false,
+                                    "opening_filter": true,
+                                    "ending_filter": true,
+                                    "insert_filter": true,
+                                    "normal_broadcast": true,
+                                    "dub": false,
+                                    "rebroadcast": true,
+                                    "standard": true,
+                                    "instrumental": true,
+                                    "chanting": true,
+                                    "character": true
+                                  })
+                                });
+
 
                               const results = await response.json();
                               
@@ -374,13 +417,9 @@ function init() {
                               }
 
                               // Filter results by matching anime name or anilist ID
-                              const filteredResults = results.filter(result => {
-                                if (result.linked_ids && result.linked_ids.anilist === parseInt(ANILIST_ID)) {
-                                  return true;
-                                }
-                                return isSimilarTitle(result.animeENName, animeData.name) || 
-                                       isSimilarTitle(result.animeJPName, animeData.name);
-                              });
+                              const filteredResults = results.filter(result =>
+                                  result.linked_ids && result.linked_ids.anilist === parseInt(ANILIST_ID)
+                              );
 
                               if (filteredResults.length === 0) {
                                 themesList.innerHTML = '<div class="error">No matching themes found</div>';
@@ -635,15 +674,15 @@ function init() {
                         volumeBar.style.width = \`\${INITIAL_VOLUME * 100}%\`;
                 
                       })();
-                    `)
+                    `);
 
-                    body.append(script)
+                    body.append(script);
                 } catch (error) {
-                    console.error("Error in plugin:", error)
+                    console.error("Error in plugin:", error);
                 }
-            })
+            });
 
-            ctx.screen.loadCurrent()
-        })
-    })
+            ctx.screen.loadCurrent();
+        });
+    });
 }
