@@ -1,11 +1,11 @@
 {
   "id": "ui-translation",
   "name": "UI Translation",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "manifestURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/UI-Translation/manifest.json",
   "language": "typescript",
   "type": "plugin",
-  "description": "Translates Seanime UI into 9 different languages.",
+  "description": "Translates Seanime UI into +10 different languages.",
   "author": "jabifx",
   "icon": "",
   "website": "",
