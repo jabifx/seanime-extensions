@@ -5,6 +5,7 @@ function init() {
         const defaultProvider = $storage.get("anime-player.provider") ?? "animethemes";
         const initialVolume = $storage.get("anime-player.volume") ?? 0.7;
         let isAnimePlayerInjected = false;
+        let lastAnilistId = null;
 
         const tray = ctx.newTray({
             tooltipText: "Anime Themes",
@@ -96,18 +97,19 @@ function init() {
                     const existingScripts = await ctx.dom.query("script[data-anime-player]");
                     for (const s of existingScripts) await s.remove();
                     isAnimePlayerInjected = false;
+                    lastAnilistId = null;
 
                     return;
                 }
 
-                if (isAnimePlayerInjected) {
+                const anilistId = e.searchParams?.id;
+                if (!anilistId) return;
+                if (isAnimePlayerInjected && anilistId === lastAnilistId) {
                     console.log("Anime Player ya inyectado, saltando...");
                     return;
                 }
                 isAnimePlayerInjected = true;
-
-                const anilistId = e.searchParams?.id;
-                if (!anilistId) return;
+                lastAnilistId = anilistId;
 
                 try {
                     const body = await ctx.dom.queryOne("body");
@@ -285,6 +287,7 @@ function init() {
                                               startDate {
                                                 year
                                               }
+                                              format
                                               type
                                             }
                                           }
@@ -316,21 +319,34 @@ function init() {
                                 let media = json.data.Media;
                                 
                                 async function getOldestPrequel(media) {
+                                    console.log(media)
                                   let current = media;
+                                  const visited = new Set();
                                 
                                   while (true) {
+                                    // Evitar bucles infinitos
+                                    if (visited.has(current.id)) break;
+                                    visited.add(current.id);
+                                
                                     const prequels = current.relations?.edges
-                                      .filter(e =>
-                                      e.relationType === "PREQUEL" &&
-                                      e.node.type === "ANIME" &&
-                                      ["TV", "TV_SHORT", "ONA"].includes(e.node.format)
-                                        )
+                                      ?.filter(e =>
+                                        e.relationType === "PREQUEL" &&
+                                        e.node.type === "ANIME" &&
+                                        ["TV", "TV_SHORT", "ONA"].includes(e.node.format || "")
+                                      )
                                       ?.map(e => e.node);
                                 
                                     if (!prequels || prequels.length === 0) break;
                                 
-                                    prequels.sort((a, b) => (a.startDate?.year || 9999) - (b.startDate?.year || 9999));
+                                    // Ordena por año (prefiere valores definidos y antiguos)
+                                    prequels.sort((a, b) => {
+                                      const ay = a.startDate?.year ?? 9999;
+                                      const by = b.startDate?.year ?? 9999;
+                                      return ay - by;
+                                    });
+                                
                                     const oldest = prequels[0];
+                                    if (!oldest) break;
                                 
                                     const res = await fetch("https://graphql.anilist.co", {
                                       method: "POST",
@@ -352,6 +368,7 @@ function init() {
                                 
                                   return current;
                                 }
+
                                 
                                 const oldestMedia = await getOldestPrequel(media);
                                 const titleData = oldestMedia.title;
@@ -411,7 +428,7 @@ function init() {
 
                               let results = await response.json();
 
-                            // Si no hay resultados, probar con sinónimos
+                            
                             if ((!results || results.length === 0) && oldestMedia.synonyms?.length) {
                               for (const altName of oldestMedia.synonyms) {
                                 console.log("Retrying AniSongDB search with synonym:", altName);
