@@ -2,16 +2,13 @@ function init() {
     $ui.register((ctx) => {
         const startMinimized = $storage.get("anime-player.startMinimized") ?? false;
         const autoplay = $storage.get("anime-player.autoplay") ?? true;
-        const defaultProvider =
-            $storage.get("anime-player.provider") ?? "animethemes";
+        const defaultProvider = $storage.get("anime-player.provider") ?? "animethemes";
         const initialVolume = $storage.get("anime-player.volume") ?? 0.7;
-
         let isAnimePlayerInjected = false;
 
         const tray = ctx.newTray({
             tooltipText: "Anime Themes",
-            iconUrl:
-                "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeThemes/icon.ico",
+            iconUrl: "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/AnimeThemes/icon.ico",
             withContent: true,
         });
 
@@ -29,9 +26,9 @@ function init() {
         });
 
         const startMinimizedState = ctx.state(startMinimized);
-        ctx.setInterval(() => {
-            startMinimizedState.set(startMinimizedRef.current);
-        }, 100);
+        //ctx.setInterval(() => {
+        //    startMinimizedState.set(startMinimizedRef.current);
+        //}, 100);
 
         tray.render(() => {
             const isMinimized = startMinimizedState.get();
@@ -96,12 +93,8 @@ function init() {
                 if (!isEntry) {
                     const existingPlayer = await ctx.dom.queryOne("#anime-theme-player");
                     if (existingPlayer) await existingPlayer.remove();
-
-                    const existingScripts = await ctx.dom.query(
-                        "script[data-anime-player]",
-                    );
+                    const existingScripts = await ctx.dom.query("script[data-anime-player]");
                     for (const s of existingScripts) await s.remove();
-
                     isAnimePlayerInjected = false;
 
                     return;
@@ -120,11 +113,9 @@ function init() {
                     const body = await ctx.dom.queryOne("body");
                     if (!body) return;
 
-                    const savedStartMinimized =
-                        $storage.get("anime-player.startMinimized") ?? false;
+                    const savedStartMinimized = $storage.get("anime-player.startMinimized") ?? false;
                     const savedAutoplay = $storage.get("anime-player.autoplay") ?? true;
-                    const savedProvider =
-                        $storage.get("anime-player.provider") ?? "animethemes";
+                    const savedProvider = $storage.get("anime-player.provider") ?? "animethemes";
                     const savedVolume = $storage.get("anime-player.volume") ?? 0.7;
                     const effectiveAutoplay = savedStartMinimized ? false : savedAutoplay;
 
@@ -142,21 +133,13 @@ function init() {
                         const START_MINIMIZED = ${savedStartMinimized};
                         const AUTOPLAY = ${effectiveAutoplay};
                         const PROVIDER = "${savedProvider}";
-                        const INITIAL_VOLUME = "${initialVolume}";
+                        const INITIAL_VOLUME = "${savedVolume}";
                 
                         const existingPlayer = document.getElementById("anime-theme-player");
-                        if (existingPlayer) {
-                          const existingVideo = existingPlayer.querySelector("video");
-                          if (existingVideo) {
-                            existingVideo.pause();
-                            existingVideo.src = "";
-                            existingVideo.load();
-                          }
-                          existingPlayer.remove();
-                        }
+                        if (existingPlayer) { existingPlayer.remove(); }
                 
                         const style = document.createElement("style");
-                        style.textContent = \`@keyframes slideIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } } @keyframes slideDown { from { max-height: 0; opacity: 0; } to { max-height: 180px; opacity: 1; } } @keyframes slideUp { from { max-height: 180px; opacity: 1; } to { max-height: 0; opacity: 0; } } .anime-theme-player { position: fixed; bottom: 20px; right: 20px; width: 380px; background: linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(20, 20, 20, 0.98)); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 0; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); z-index: 40; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #fff; max-height: 700px; display: flex; flex-direction: column; animation: slideIn 0.3s ease-out; overflow: hidden; user-select: none; } .anime-theme-player.minimized { width: 200px; height: 50px; padding: 0; cursor: pointer; border-radius: 12px; animation: none; } .anime-theme-player.dragging { cursor: grabbing; transition: none; } .player-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: move; user-select: none; } .player-title { font-size: 15px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px; user-select: none; } .header-controls { display: flex; gap: 8px; } .header-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; width: 26px; height: 26px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; user-select: none; } .header-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.3); } .restore-btn { width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.15); color: white; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; display: none; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; user-select: none; } .restore-btn:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.3); } .anime-theme-player.minimized .restore-btn { display: flex; } .anime-theme-player.minimized .player-content { display: none; } .player-content { display: flex; flex-direction: column; height: 100%; overflow: hidden; } .themes-list { max-height: 180px; overflow-y: auto; padding: 10px; background: rgba(0, 0, 0, 0.2); user-select: none; transition: all 0.3s ease; } .themes-list.hidden { max-height: 0; padding: 0; opacity: 0; overflow: hidden; } .themes-list::-webkit-scrollbar { width: 6px; } .themes-list::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); border-radius: 3px; } .themes-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 3px; } .themes-list::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); } .theme-item { padding: 10px; background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; font-size: 12px; user-select: none; } .theme-item:hover { background: rgba(40, 40, 40, 0.8); border-color: rgba(255, 255, 255, 0.2); transform: translateX(4px); } .theme-item.active { background: rgba(60, 60, 60, 0.8); border-color: rgba(255, 255, 255, 0.4); border-left: 4px solid #ffffff; } .theme-type { color: #ffffff; font-weight: 700; font-size: 10px; margin-right: 6px; padding: 2px 6px; background: rgba(255, 255, 255, 0.15); border-radius: 4px; display: inline-block; user-select: none; } .video-container { width: 100%; height: 220px; background: rgba(0, 0, 0, 0.8); overflow: hidden; display: none; align-items: center; justify-content: center; position: relative; } .video-container.active { display: flex; } .video-container.hidden-video { height: 0; min-height: 0; } .video-container.hidden-video video { display: none; } .video-container video { width: 100%; height: 100%; object-fit: contain; } .video-placeholder { color: #9ca3af; font-size: 13px; text-align: center; animation: pulse 2s infinite; user-select: none; } .video-controls-overlay {position: relative;background: rgba(0, 0, 0, 0.6);padding: 12px;border-top: 1px solid rgba(255, 255, 255, 0.1);opacity: 1;pointer-events: all;}.video-container:hover .video-controls-overlay { opacity: 1; pointer-events: all; } .video-container.hidden-video .video-controls-overlay { opacity: 1; pointer-events: all; background: rgba(0, 0, 0, 0.9); position: relative; padding: 14px; } .progress-container { margin-bottom: 10px; } .progress-bar { height: 6px; background: rgba(255, 255, 255, 0.3); border-radius: 2px; position: relative; cursor: pointer; overflow: hidden; } .progress-fill { height: 100%; background: #ffffff; border-radius: 2px; transition: width 0.1s; position: relative; } .progress-fill::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: white; border-radius: 50%; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); opacity: 0; } .progress-bar:hover .progress-fill::after { opacity: 1; } .time-display { display: flex; justify-content: space-between; font-size: 10px; color: #e5e7eb; margin-top: 4px; user-select: none; } .controls-row { display: flex; align-items: center; gap: 6px; } .control-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 12px; font-weight: bold; user-select: none; } .control-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.4); } .control-btn.play-btn { width: 34px; height: 34px; background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.4); } .volume-section {display: flex;align-items: center;gap: 6px;flex: 0 0 60px;} .volume-control {flex: 0 0 60px;height: 6px;background: rgba(255, 255, 255, 0.3);border-radius: 2px;position: relative;cursor: pointer;} .volume-bar {height: 100%;background: #ffffff;border-radius: 2px;transition: width 0.1s;} .fullscreen-btn {position: absolute;top: 10px;right: 10px;background: rgba(0, 0, 0, 0.7);border: 1px solid rgba(255, 255, 255, 0.3);color: white;width: 32px;height: 32px;border-radius: 6px;cursor: pointer;display: flex;align-items: center;justify-content: center;font-size: 14px;transition: all 0.2s;opacity: 0;user-select: none;} .fullscreen-btn { position: absolute; top: 10px; right: 10px; background: rgba(0, 0, 0, 0.7); border: 1px solid rgba(255, 255, 255, 0.3); color: white; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 12px; transition: all 0.2s; opacity: 0; user-select: none; } .video-container:hover .fullscreen-btn { opacity: 1; } .video-container.hidden-video .fullscreen-btn { display: none; } .fullscreen-btn:hover { background: rgba(0, 0, 0, 0.9); transform: scale(1.05); } .toggle-list-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; width: 26px; height: 26px; border-radius: 8px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; user-select: none; } .toggle-list-btn.visible { display: flex; } .toggle-list-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.3); } .hide-video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; width: 26px; height: 26px; border-radius: 8px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; user-select: none; } .hide-video-btn.visible { display: flex; } .hide-video-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.3); } .loading { text-align: center; color: #9ca3af; font-size: 12px; padding: 16px; user-select: none; } .error { color: #ef4444; font-size: 11px; padding: 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; margin: 10px; user-select: none; }\`;
+                        style.textContent = \`@keyframes slideIn { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } } @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } } @keyframes slideDown { from { max-height: 0; opacity: 0; } to { max-height: 180px; opacity: 1; } } @keyframes slideUp { from { max-height: 180px; opacity: 1; } to { max-height: 0; opacity: 0; } } .anime-theme-player { position: fixed; bottom: 20px; right: 20px; width: 380px; background: linear-gradient(135deg, rgba(0, 0, 0, 0.98), rgba(20, 20, 20, 0.98)); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 16px; padding: 0; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); z-index: 40; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: #fff; max-height: 700px; display: flex; flex-direction: column; animation: slideIn 0.3s ease-out; overflow: hidden; user-select: none; } .anime-theme-player.minimized { width: 200px; height: 50px; padding: 0; cursor: pointer; border-radius: 12px; animation: none; } .anime-theme-player.dragging { cursor: grabbing; transition: none; } .player-header-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; background: rgba(0, 0, 0, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.1); cursor: move; user-select: none; } .player-title { font-size: 15px; font-weight: 700; color: #ffffff; display: flex; align-items: center; gap: 8px; user-select: none; } .header-controls { display: flex; gap: 8px; } .header-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; width: 26px; height: 26px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; user-select: none; } .header-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.3); } .restore-btn { width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.15); color: white; border-radius: 12px; cursor: pointer; font-size: 15px; font-weight: 700; display: none; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; user-select: none; } .restore-btn:hover { background: rgba(0, 0, 0, 0.6); border-color: rgba(255, 255, 255, 0.3); } .anime-theme-player.minimized .restore-btn { display: flex; } .anime-theme-player.minimized .player-content { display: none; } .player-content { display: flex; flex-direction: column; height: 100%; overflow: hidden; } .themes-list { max-height: 180px; overflow-y: auto; padding: 10px; background: rgba(0, 0, 0, 0.2); user-select: none; transition: all 0.3s ease; } .themes-list.hidden { max-height: 0; padding: 0; opacity: 0; overflow: hidden; } .themes-list::-webkit-scrollbar { width: 6px; } .themes-list::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.3); border-radius: 3px; } .themes-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.3); border-radius: 3px; } .themes-list::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.4); } .theme-item { padding: 10px; background: rgba(20, 20, 20, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; margin-bottom: 6px; cursor: pointer; transition: all 0.2s; font-size: 12px; user-select: none; } .theme-item:hover { background: rgba(40, 40, 40, 0.8); border-color: rgba(255, 255, 255, 0.2); transform: translateX(4px); } .theme-item.active { background: rgba(60, 60, 60, 0.8); border-color: rgba(255, 255, 255, 0.4); border-left: 4px solid #ffffff; } .theme-type { color: #ffffff; font-weight: 700; font-size: 10px; margin-right: 6px; padding: 2px 6px; background: rgba(255, 255, 255, 0.15); border-radius: 4px; display: inline-block; user-select: none; } .video-container { width: 100%; height: 220px; background: rgba(0, 0, 0, 0.8); overflow: hidden; display: none; align-items: center; justify-content: center; position: relative; } .video-container.active { display: flex; } .video-container.hidden-video { height: 0; min-height: 0; } .video-container.hidden-video video { display: none; } .video-container video { width: 100%; height: 100%; object-fit: contain; } .video-placeholder { color: #9ca3af; font-size: 13px; text-align: center; animation: pulse 2s infinite; user-select: none; } .video-controls-overlay {position: relative;background: rgba(0, 0, 0, 0.6);padding: 12px;border-top: 1px solid rgba(255, 255, 255, 0.1);opacity: 1;pointer-events: all;}.video-container:hover .video-controls-overlay { opacity: 1; pointer-events: all; } .video-container.hidden-video .video-controls-overlay { opacity: 1; pointer-events: all; background: rgba(0, 0, 0, 0.9); position: relative; padding: 14px; } .progress-container { margin-bottom: 10px; } .progress-bar { height: 6px; background: rgba(255, 255, 255, 0.3); border-radius: 2px; position: relative; cursor: pointer; overflow: hidden; } .progress-fill { height: 100%; background: #ffffff; border-radius: 2px; transition: width 0.1s; position: relative; } .progress-fill::after { content: ''; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; background: white; border-radius: 50%; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); opacity: 0; } .progress-bar:hover .progress-fill::after { opacity: 1; } .time-display { display: flex; justify-content: space-between; font-size: 10px; color: #e5e7eb; margin-top: 4px; user-select: none; } .controls-row { display: flex; align-items: center; gap: 6px; } .control-btn { background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); color: #ffffff; width: 28px; height: 28px; border-radius: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; font-size: 12px; font-weight: bold; user-select: none; } .control-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.4); } .control-btn.play-btn { width: 34px; height: 34px; background: rgba(255, 255, 255, 0.2); border-color: rgba(255, 255, 255, 0.4); } .volume-section {display: flex;align-items: center;gap: 6px;flex: 0 0 60px;} .volume-control {flex: 0 0 60px;height: 6px;background: rgba(255, 255, 255, 0.3);border-radius: 2px;position: relative;cursor: pointer;} .volume-bar {height: 100%;background: #ffffff;border-radius: 2px;transition: width 0.1s;} .fullscreen-btn {position: absolute;top: 10px;right: 10px;background: rgba(0, 0, 0, 0.7);border: 1px solid rgba(255, 255, 255, 0.3);color: white;width: 32px;height: 32px;border-radius: 6px;cursor: pointer;display: flex;align-items: center;justify-content: center;font-size: 14px;transition: all 0.2s;opacity: 0;user-select: none;} .video-container:hover .fullscreen-btn { opacity: 1; } .video-container.hidden-video .fullscreen-btn { display: none; } .fullscreen-btn:hover { background: rgba(0, 0, 0, 0.9); transform: scale(1.05); } .toggle-list-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; width: 26px; height: 26px; border-radius: 8px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; user-select: none; } .toggle-list-btn.visible { display: flex; } .toggle-list-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.3); } .hide-video-btn { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #ffffff; width: 26px; height: 26px; border-radius: 8px; cursor: pointer; display: none; align-items: center; justify-content: center; font-size: 14px; transition: all 0.2s; user-select: none; } .hide-video-btn.visible { display: flex; } .hide-video-btn:hover { background: rgba(255, 255, 255, 0.2); transform: scale(1.05); border-color: rgba(255, 255, 255, 0.3); } .loading { text-align: center; color: #9ca3af; font-size: 12px; padding: 16px; user-select: none; } .error { color: #ef4444; font-size: 11px; padding: 10px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; margin: 10px; user-select: none; }\`;
                         document.head.appendChild(style);
                                         
                         const player = document.createElement("div");
@@ -239,88 +222,78 @@ function init() {
                         async function fetchThemes() {
                           try {
                             if (PROVIDER === "animethemes") {
-                              const response = await fetch(
-                                \`https://api.animethemes.moe/anime?filter[has]=resources&filter[site]=AniList&filter[external_id]=\${ANILIST_ID}&include=animethemes.animethemeentries.videos,animethemes.song.artists\`
-                              );
-                  
+                              const response = await fetch(\`https://api.animethemes.moe/anime?filter[has]=resources&filter[site]=AniList&filter[external_id]=\${ANILIST_ID}&include=animethemes.animethemeentries.videos,animethemes.song.artists\`);
                               const data = await response.json();
                   
-                              if (data.anime && data.anime.length > 0) {
-                                const animeData = data.anime[0];
-                                animeTitle = animeData.name;
-                                
-                                if (animeTitleEl) {
-                                  animeTitleEl.textContent = animeData.name;
-                                }
-                  
-                                if (animeData.animethemes && animeData.animethemes.length > 0) {
-                                  let html = "";
-                                  animeData.animethemes.forEach(theme => {
-                                    const themeType = \`\${theme.type}\${theme.sequence || ""}\`;
-                                    const songTitle = theme.song?.title || "Unknown";
-                                    const artists = theme.song?.artists?.map(artist => artist.name).join(", ") || "";
-                                    const videoLink = theme.animethemeentries?.[0]?.videos?.[0]?.link || "";
-                  
-                                    if (videoLink) {
-                                      html += \`
-                                        <div class="theme-item" data-anime="\${animeData.name}" data-type="\${themeType}" data-song="\${songTitle}" data-video="\${videoLink}">
-                                          <span class="theme-type">\${themeType}</span>
-                                          <span>\${songTitle}</span>
-                                          \${artists ? \`<div style="font-size: 10px; color: #9ca3af; margin-top: 3px;">\${artists}</div>\` : ""}
-                                        </div>
-                                      \`;
-                                    }
-                                  });
-                  
-                                  themesList.innerHTML = html || '<div class="error">No themes</div>';
-                                  setupThemeClickHandlers();
-                                } else {
-                                  themesList.innerHTML = '<div class="error">Themes not found</div>';
-                                }
-                              } else {
+                              if (!(data.anime && data.anime.length > 0)) {
                                 themesList.innerHTML = '<div class="error">Anime not found on Animethemes</div>';
+                                return
                               }
+                              const animeData = data.anime[0];
+                            animeTitle = animeData.name;
+                            if (animeTitleEl) { animeTitleEl.textContent = animeData.name;}
+              
+                            if (!(animeData.animethemes && animeData.animethemes.length > 0)) {
+                                themesList.innerHTML = '<div class="error">Themes not found</div>';
+                                return
+                            }
+                            
+                            let html = "";
+                              animeData.animethemes.forEach(theme => {
+                                const themeType = \`\${theme.type}\${theme.sequence || ""}\`;
+                                const songTitle = theme.song?.title || "Unknown";
+                                const artists = theme.song?.artists?.map(artist => artist.name).join(", ") || "";
+                                const videoLink = theme.animethemeentries?.[0]?.videos?.[0]?.link || "";
+              
+                                if (videoLink) {
+                                  html += \`
+                                    <div class="theme-item" data-anime="\${animeData.name}" data-type="\${themeType}" data-song="\${songTitle}" data-video="\${videoLink}">
+                                      <span class="theme-type">\${themeType}</span>
+                                      <span>\${songTitle}</span>
+                                      \${artists ? \`<div style="font-size: 10px; color: #9ca3af; margin-top: 3px;">\${artists}</div>\` : ""}
+                                    </div>
+                                  \`;
+                                }
+                              });
+              
+                              themesList.innerHTML = html || '<div class="error">No themes</div>';
+                              setupThemeClickHandlers();
                             } else if (PROVIDER === "anisongdb") {
-                              // Get anime title (prefer first season) directly from AniList
                                 const query = \`
                                   query ($id: Int) {
-                                    Media(id: $id, type: ANIME) {
-                                      id
-                                      title {
-                                        romaji
-                                        english
-                                        native
-                                      }
-                                      startDate {
-                                        year
-                                      }
-                                      relations {
-                                        edges {
-                                          relationType
-                                          node {
-                                            id
-                                            title {
-                                              romaji
-                                              english
-                                              native
+                                      Media(id: $id, type: ANIME) {
+                                        id
+                                        title {
+                                          romaji
+                                          english
+                                          native
+                                        }
+                                        synonyms
+                                        startDate {
+                                          year
+                                        }
+                                        relations {
+                                          edges {
+                                            relationType
+                                            node {
+                                              id
+                                              title {
+                                                romaji
+                                                english
+                                                native
+                                              }
+                                              startDate {
+                                                year
+                                              }
+                                              type
                                             }
-                                            startDate {
-                                              year
-                                            }
-                                            type
                                           }
                                         }
                                       }
                                     }
-                                  }
                                 \`;
                                 
-                                const parsedId = Number(ANILIST_ID);
-                                if (isNaN(parsedId)) {
-                                  themesList.innerHTML = '<div class="error">Invalid AniList ID</div>';
-                                  return;
-                                }
-                                
+                                const parsedId = Number(ANILIST_ID);                              
                                 const responseAniList = await fetch("https://graphql.anilist.co", {
                                   method: "POST",
                                   headers: {
@@ -340,25 +313,52 @@ function init() {
                                   return;
                                 }
                                 
-                                const media = json.data.Media;
+                                let media = json.data.Media;
                                 
-                                // Buscar el prequel más antiguo (primera temporada)
-                                let titleData = media.title;
-                                if (media.relations?.edges?.length) {
-                                  const prequels = media.relations.edges
-                                    .filter(e => e.relationType === "PREQUEL" && e.node.type === "ANIME")
-                                    .map(e => e.node);
+                                async function getOldestPrequel(media) {
+                                  let current = media;
                                 
-                                  if (prequels.length > 0) {
+                                  while (true) {
+                                    const prequels = current.relations?.edges
+                                      .filter(e =>
+                                      e.relationType === "PREQUEL" &&
+                                      e.node.type === "ANIME" &&
+                                      ["TV", "TV_SHORT", "ONA"].includes(e.node.format)
+                                        )
+                                      ?.map(e => e.node);
+                                
+                                    if (!prequels || prequels.length === 0) break;
+                                
                                     prequels.sort((a, b) => (a.startDate?.year || 9999) - (b.startDate?.year || 9999));
-                                    titleData = prequels[0].title;
+                                    const oldest = prequels[0];
+                                
+                                    const res = await fetch("https://graphql.anilist.co", {
+                                      method: "POST",
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                        "Accept": "application/json"
+                                      },
+                                      body: JSON.stringify({
+                                        query,
+                                        variables: { id: oldest.id }
+                                      })
+                                    });
+                                
+                                    const json = await res.json();
+                                    if (!json.data?.Media) break;
+                                
+                                    current = json.data.Media;
                                   }
+                                
+                                  return current;
                                 }
+                                
+                                const oldestMedia = await getOldestPrequel(media);
+                                const titleData = oldestMedia.title;
                                 
                                 animeTitle = titleData.romaji || titleData.english || titleData.native;
                                 if (animeTitleEl) animeTitleEl.textContent = animeTitle;
 
-                              
                               if (!animeTitle) {
                                   themesList.innerHTML = '<div class="error">Anime not found</div>';
                                   return;
@@ -409,14 +409,49 @@ function init() {
                                 });
 
 
-                              const results = await response.json();
-                              
-                              if (!results || results.length === 0) {
-                                themesList.innerHTML = '<div class="error">No themes found on AniSongDB</div>';
-                                return;
-                              }
+                              let results = await response.json();
 
-                              // Filter results by matching anime name or anilist ID
+                            // Si no hay resultados, probar con sinónimos
+                            if ((!results || results.length === 0) && oldestMedia.synonyms?.length) {
+                              for (const altName of oldestMedia.synonyms) {
+                                console.log("Retrying AniSongDB search with synonym:", altName);
+                                const retryResponse = await fetch("https://anisongdb.com/api/search_request", {
+                                  method: "POST",
+                                  headers: {
+                                    "Content-Type": "application/json"
+                                  },
+                                  body: JSON.stringify({
+                                    anime_search_filter: {
+                                      search: altName,
+                                      partial_match: true
+                                    },
+                                    and_logic: false,
+                                    ignore_duplicate: false,
+                                    opening_filter: true,
+                                    ending_filter: true,
+                                    insert_filter: true,
+                                    normal_broadcast: true,
+                                    rebroadcast: true,
+                                    standard: true,
+                                    instrumental: true,
+                                    chanting: true,
+                                    character: true
+                                  })
+                                });
+                            
+                                const retryResults = await retryResponse.json();
+                                if (retryResults && retryResults.length > 0) {
+                                  results = retryResults;
+                                  break;
+                                }
+                              }
+                            }
+                            
+                            if (!results || results.length === 0) {
+                              themesList.innerHTML = '<div class="error">No themes found on AniSongDB</div>';
+                              return;
+                            }
+
                               const filteredResults = results.filter(result =>
                                   result.linked_ids && result.linked_ids.anilist === parseInt(ANILIST_ID)
                               );
@@ -426,7 +461,6 @@ function init() {
                                 return;
                               }
 
-                              // Group by song type and number
                               const songMap = new Map();
                               filteredResults.forEach(result => {
                                 const videoUrl = result.MQ || result.HQ;
@@ -434,15 +468,10 @@ function init() {
 
                                 const fullVideoUrl = \`https://naedist.animemusicquiz.com/\${videoUrl}\`;
                                 
-                                // Parse song type (e.g., "Opening 1" -> "OP1")
                                 let themeType = "";
-                                if (result.songType.includes("Opening")) {
-                                  themeType = result.songType.replace("Opening", "OP");
-                                } else if (result.songType.includes("Ending")) {
-                                  themeType = result.songType.replace("Ending", "ED");
-                                } else if (result.songType.includes("Insert")) {
-                                  themeType = result.songType.replace("Insert Song", "IN");
-                                }
+                                if (result.songType.includes("Opening")) { themeType = result.songType.replace("Opening", "OP"); } 
+                                else if (result.songType.includes("Ending")) { themeType = result.songType.replace("Ending", "ED");}
+                                else if (result.songType.includes("Insert")) { themeType = result.songType.replace("Insert Song", "IN");}
 
                                 const key = \`\${themeType}-\${result.songName}\`;
                                 if (!songMap.has(key)) {
@@ -503,14 +532,13 @@ function init() {
                             themeItems.forEach(i => i.classList.remove("active"));
                             item.classList.add("active");
           
-                            if (videoLink) {
-                              videoContainer.classList.add("active");
+                            if (!videoLink) { return }
+                            
+                            videoContainer.classList.add("active");
                               toggleListBtn.classList.add("visible");
                               hideVideoBtn.classList.add("visible");
           
-                              if (animeTitleEl) {
-                                animeTitleEl.textContent = \`\${animeName} - \${songName}\`;
-                              }
+                              if (animeTitleEl) { animeTitleEl.textContent = \`\${animeName} - \${songName}\`;}
           
                               if (!video) {
                                 video = document.createElement("video");
@@ -541,11 +569,7 @@ function init() {
                               if (shouldAutoplay) {
                                 video.play();
                                 playBtn.textContent = "⏸";
-                              } else {
-                                playBtn.textContent = "▶";
-                              }
-                              
-                            }
+                              } else { playBtn.textContent = "▶"; }
                           }
                           
                           themeItems.forEach(item => {
