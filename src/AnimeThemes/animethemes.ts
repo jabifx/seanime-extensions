@@ -27,9 +27,6 @@ function init() {
         });
 
         const startMinimizedState = ctx.state(startMinimized);
-        //ctx.setInterval(() => {
-        //    startMinimizedState.set(startMinimizedRef.current);
-        //}, 100);
 
         tray.render(() => {
             const isMinimized = startMinimizedState.get();
@@ -221,319 +218,239 @@ function init() {
                           }
                         });
                         
-                        async function fetchThemes() {
+                        async function fetchThemes(providerOverride) {
                           try {
-                            if (PROVIDER === "animethemes") {
-                              const response = await fetch(\`https://api.animethemes.moe/anime?filter[has]=resources&filter[site]=AniList&filter[external_id]=\${ANILIST_ID}&include=animethemes.animethemeentries.videos,animethemes.song.artists\`);
-                              const data = await response.json();
-                  
-                              if (!(data.anime && data.anime.length > 0)) {
+                            const provider = providerOverride || PROVIDER; // usa override si se pasa
+                            if (provider === "animethemes") {
+                              const res = await fetch(\`https://api.animethemes.moe/anime?filter[has]=resources&filter[site]=AniList&filter[external_id]=\${ANILIST_ID}&include=animethemes.animethemeentries.videos,animethemes.song.artists\`);
+                              const data = await res.json();
+                              const animeData = data.anime?.[0];
+                        
+                              if (!animeData) {
                                 themesList.innerHTML = '<div class="error">Anime not found on Animethemes</div>';
-                                return
-                              }
-                              const animeData = data.anime[0];
-                            animeTitle = animeData.name;
-                            if (animeTitleEl) { animeTitleEl.textContent = animeData.name;}
-              
-                            if (!(animeData.animethemes && animeData.animethemes.length > 0)) {
-                                themesList.innerHTML = '<div class="error">Themes not found</div>';
-                                return
-                            }
-                            
-                            let html = "";
-                              animeData.animethemes.forEach(theme => {
-                                const themeType = \`\${theme.type}\${theme.sequence || ""}\`;
-                                const songTitle = theme.song?.title || "Unknown";
-                                const artists = theme.song?.artists?.map(artist => artist.name).join(", ") || "";
-                                const videoLink = theme.animethemeentries?.[0]?.videos?.[0]?.link || "";
-              
-                                if (videoLink) {
-                                  html += \`
-                                    <div class="theme-item" data-anime="\${animeData.name}" data-type="\${themeType}" data-song="\${songTitle}" data-video="\${videoLink}">
-                                      <span class="theme-type">\${themeType}</span>
-                                      <span>\${songTitle}</span>
-                                      \${artists ? \`<div style="font-size: 10px; color: #9ca3af; margin-top: 3px;">\${artists}</div>\` : ""}
-                                    </div>
-                                  \`;
-                                }
-                              });
-              
-                              themesList.innerHTML = html || '<div class="error">No themes</div>';
-                              setupThemeClickHandlers();
-                            } else if (PROVIDER === "anisongdb") {
-                                const query = \`
-                                  query ($id: Int) {
-                                      Media(id: $id, type: ANIME) {
-                                        id
-                                        title {
-                                          romaji
-                                          english
-                                          native
-                                        }
-                                        synonyms
-                                        startDate {
-                                          year
-                                        }
-                                        relations {
-                                          edges {
-                                            relationType
-                                            node {
-                                              id
-                                              title {
-                                                romaji
-                                                english
-                                                native
-                                              }
-                                              startDate {
-                                                year
-                                              }
-                                              format
-                                              type
-                                            }
-                                          }
-                                        }
-                                      }
-                                    }
-                                \`;
-                                
-                                const parsedId = Number(ANILIST_ID);                              
-                                const responseAniList = await fetch("https://graphql.anilist.co", {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json",
-                                    "Accept": "application/json"
-                                  },
-                                  body: JSON.stringify({
-                                    query,
-                                    variables: { id: parsedId }
-                                  })
-                                });
-                                
-                                const json = await responseAniList.json();
-                                if (!json.data?.Media) {
-                                  themesList.innerHTML = '<div class="error">Anime not found on AniList</div>';
-                                  console.error(json);
-                                  return;
-                                }
-                                
-                                let media = json.data.Media;
-                                
-                                async function getOldestPrequel(media) {
-                                    console.log(media)
-                                  let current = media;
-                                  const visited = new Set();
-                                
-                                  while (true) {
-                                    // Evitar bucles infinitos
-                                    if (visited.has(current.id)) break;
-                                    visited.add(current.id);
-                                
-                                    const prequels = current.relations?.edges
-                                      ?.filter(e =>
-                                        e.relationType === "PREQUEL" &&
-                                        e.node.type === "ANIME" &&
-                                        ["TV", "TV_SHORT", "ONA"].includes(e.node.format || "")
-                                      )
-                                      ?.map(e => e.node);
-                                
-                                    if (!prequels || prequels.length === 0) break;
-                                
-                                    // Ordena por año (prefiere valores definidos y antiguos)
-                                    prequels.sort((a, b) => {
-                                      const ay = a.startDate?.year ?? 9999;
-                                      const by = b.startDate?.year ?? 9999;
-                                      return ay - by;
-                                    });
-                                
-                                    const oldest = prequels[0];
-                                    if (!oldest) break;
-                                
-                                    const res = await fetch("https://graphql.anilist.co", {
-                                      method: "POST",
-                                      headers: {
-                                        "Content-Type": "application/json",
-                                        "Accept": "application/json"
-                                      },
-                                      body: JSON.stringify({
-                                        query,
-                                        variables: { id: oldest.id }
-                                      })
-                                    });
-                                
-                                    const json = await res.json();
-                                    if (!json.data?.Media) break;
-                                
-                                    current = json.data.Media;
-                                  }
-                                
-                                  return current;
-                                }
-
-                                
-                                const oldestMedia = await getOldestPrequel(media);
-                                const titleData = oldestMedia.title;
-                                
-                                animeTitle = titleData.romaji || titleData.english || titleData.native;
-                                if (animeTitleEl) animeTitleEl.textContent = animeTitle;
-
-                              if (!animeTitle) {
-                                  themesList.innerHTML = '<div class="error">Anime not found</div>';
-                                  return;
-                                }
-                                
-                                if (animeTitleEl) {
-                                  animeTitleEl.textContent = animeTitle;
-                                }
-                                
-                                const response = await fetch("https://anisongdb.com/api/search_request", {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json"
-                                  },
-                                  body: JSON.stringify({
-                                    "anime_search_filter": {
-                                      "search": animeTitle,
-                                      "partial_match": true
-                                    },
-                                    "song_name_search_filter": {
-                                      "search": animeTitle,
-                                      "partial_match": true
-                                    },
-                                    "artist_search_filter": {
-                                      "search": animeTitle,
-                                      "partial_match": true,
-                                      "group_granularity": 0,
-                                      "max_other_artist": 99
-                                    },
-                                    "composer_search_filter": {
-                                      "search": animeTitle,
-                                      "partial_match": true,
-                                      "arrangement": true
-                                    },
-                                    "and_logic": false,
-                                    "ignore_duplicate": false,
-                                    "opening_filter": true,
-                                    "ending_filter": true,
-                                    "insert_filter": true,
-                                    "normal_broadcast": true,
-                                    "dub": false,
-                                    "rebroadcast": true,
-                                    "standard": true,
-                                    "instrumental": true,
-                                    "chanting": true,
-                                    "character": true
-                                  })
-                                });
-
-
-                              let results = await response.json();
-
-                            
-                            if ((!results || results.length === 0) && oldestMedia.synonyms?.length) {
-                              for (const altName of oldestMedia.synonyms) {
-                                console.log("Retrying AniSongDB search with synonym:", altName);
-                                const retryResponse = await fetch("https://anisongdb.com/api/search_request", {
-                                  method: "POST",
-                                  headers: {
-                                    "Content-Type": "application/json"
-                                  },
-                                  body: JSON.stringify({
-                                    anime_search_filter: {
-                                      search: altName,
-                                      partial_match: true
-                                    },
-                                    and_logic: false,
-                                    ignore_duplicate: false,
-                                    opening_filter: true,
-                                    ending_filter: true,
-                                    insert_filter: true,
-                                    normal_broadcast: true,
-                                    rebroadcast: true,
-                                    standard: true,
-                                    instrumental: true,
-                                    chanting: true,
-                                    character: true
-                                  })
-                                });
-                            
-                                const retryResults = await retryResponse.json();
-                                if (retryResults && retryResults.length > 0) {
-                                  results = retryResults;
-                                  break;
-                                }
-                              }
-                            }
-                            
-                            if (!results || results.length === 0) {
-                              themesList.innerHTML = '<div class="error">No themes found on AniSongDB</div>';
-                              return;
-                            }
-
-                              const filteredResults = results.filter(result =>
-                                  result.linked_ids && result.linked_ids.anilist === parseInt(ANILIST_ID)
-                              );
-
-                              if (filteredResults.length === 0) {
-                                themesList.innerHTML = '<div class="error">No matching themes found</div>';
                                 return;
                               }
-
-                              const songMap = new Map();
-                              filteredResults.forEach(result => {
-                                const videoUrl = result.MQ || result.HQ;
-                                if (!videoUrl) return;
-
-                                const fullVideoUrl = \`https://naedist.animemusicquiz.com/\${videoUrl}\`;
-                                
-                                let themeType = "";
-                                if (result.songType.includes("Opening")) { themeType = result.songType.replace("Opening", "OP"); } 
-                                else if (result.songType.includes("Ending")) { themeType = result.songType.replace("Ending", "ED");}
-                                else if (result.songType.includes("Insert")) { themeType = result.songType.replace("Insert Song", "IN");}
-
-                                const key = \`\${themeType}-\${result.songName}\`;
-                                if (!songMap.has(key)) {
-                                  songMap.set(key, {
-                                    themeType,
-                                    songName: result.songName,
-                                    artist: result.songArtist,
-                                    videoUrl: fullVideoUrl,
-                                    anime: result.animeENName || result.animeJPName
-                                  });
-                                }
-                              });
-
-                              let html = "";
-                              const sortedThemes = Array.from(songMap.values()).sort((a, b) => {
-                                  const typeOrder = { OP: 1, ED: 2, IN: 3 };
-                                  const aType = a.themeType.match(/[A-Z]+/)[0];
-                                  const bType = b.themeType.match(/[A-Z]+/)[0];
-                                  const aNum = parseInt(a.themeType.match(/\\d+/)?.[0] || '0');
-                                  const bNum = parseInt(b.themeType.match(/\\d+/)?.[0] || '0');
-                                
-                                  if (typeOrder[aType] !== typeOrder[bType]) {
-                                    return typeOrder[aType] - typeOrder[bType];
-                                  }
-                                  return aNum - bNum;
-                                });
-
-
-                              sortedThemes.forEach(theme => {
-                                html += \`
-                                  <div class="theme-item" data-anime="\${theme.anime}" data-type="\${theme.themeType}" data-song="\${theme.songName}" data-video="\${theme.videoUrl}">
-                                    <span class="theme-type">\${theme.themeType}</span>
-                                    <span>\${theme.songName}</span>
-                                    \${theme.artist ? \`<div style="font-size: 10px; color: #9ca3af; margin-top: 3px;">\${theme.artist}</div>\` : ""}
-                                  </div>
-                                \`;
-                              });
-
+                              
+                              animeTitle = animeData.name;
+                              if (animeTitleEl) animeTitleEl.textContent = animeTitle;
+                        
+                              const themes = animeData.animethemes || [];
+                              if (themes.length === 0) {
+                                themesList.innerHTML = '<div class="error">Themes not found</div>';
+                                return;
+                              }
+                        
+                              const html = themes
+                                .map(theme => {
+                                  const video = theme.animethemeentries?.[0]?.videos?.[0]?.link;
+                                  if (!video) return "";
+                                  
+                                  const themeType = \`\${theme.type}\${theme.sequence || ""}\`;
+                                  const songTitle = theme.song?.title || "Unknown";
+                                  const artists = theme.song?.artists?.map(a => a.name).join(", ") || "";
+                                  
+                                  return \`
+                                    <div class="theme-item" data-anime="\${animeData.name}" data-type="\${themeType}" data-song="\${songTitle}" data-video="\${video}">
+                                      <span class="theme-type">\${themeType}</span>
+                                      <span>\${songTitle}</span>
+                                      \${artists ? \`<div class="artist">\${artists}</div>\` : ""}
+                                    </div>\`;
+                                })
+                                .join("");
+                        
                               themesList.innerHTML = html || '<div class="error">No themes</div>';
                               setupThemeClickHandlers();
+                              return;
                             }
-                          } catch (error) {
-                            console.error("✗ Failed to fetch themes:", error);
-                            themesList.innerHTML = '<div class="error">Error loading themes</div>';
-                          }
+                        
+                            if (provider !== "anisongdb") return;
+                        
+                            const query = \`
+                              query ($id: Int) {
+                                Media(id: $id, type: ANIME) {
+                                  id title { romaji english native }
+                                  synonyms startDate { year }
+                                  relations {
+                                    edges {
+                                      relationType
+                                      node { id title { romaji english native } startDate { year } format type }
+                                    }
+                                  }
+                                }
+                              }
+                            \`;
+                            
+                            const parsedId = Number(ANILIST_ID);
+                            const anilistRes = await fetch("https://graphql.anilist.co", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json", Accept: "application/json" },
+                              body: JSON.stringify({ query, variables: { id: parsedId } }),
+                            });
+                            
+                            const json = await anilistRes.json();
+                            let media = json.data?.Media;
+                            
+                            if (!media) {
+                              themesList.innerHTML = '<div class="error">Anime not found on AniList</div>';
+                              return;
+                            }
+                        
+                            async function getOldestPrequel(currentMedia) {
+                              const visited = new Set();
+                              let oldest = currentMedia;
+                              
+                              while (true) {
+                                if (visited.has(oldest.id)) break;
+                                visited.add(oldest.id);
+                                
+                                const prequels = oldest.relations?.edges
+                                  ?.filter(e => 
+                                    e.relationType === "PREQUEL" && 
+                                    e.node.type === "ANIME" && 
+                                    ["TV", "TV_SHORT", "ONA"].includes(e.node.format)
+                                  )
+                                  ?.map(e => e.node)
+                                  ?.sort((a, b) => (a.startDate?.year ?? 9999) - (b.startDate?.year ?? 9999));
+                                
+                                if (!prequels?.length) break;
+                        
+                                const res = await fetch("https://graphql.anilist.co", {
+                                  method: "POST",
+                                  headers: { "Content-Type": "application/json", Accept: "application/json" },
+                                  body: JSON.stringify({ query, variables: { id: prequels[0].id } }),
+                                });
+                                
+                                const next = await res.json();
+                                if (!next.data?.Media) break;
+                                oldest = next.data.Media;
+                              }
+                              
+                              return oldest;
+                            }
+                        
+                            const oldestMedia = await getOldestPrequel(media);
+                            const titleData = oldestMedia.title;
+                            animeTitle = titleData.romaji || titleData.english || titleData.native;
+                            
+                            if (!animeTitle) {
+                              themesList.innerHTML = '<div class="error">Anime not found</div>';
+                              return;
+                            }
+                            
+                            if (animeTitleEl) animeTitleEl.textContent = animeTitle;
+                        
+                            async function searchAniSongDB(searchTerm) {
+                              const res = await fetch("https://anisongdb.com/api/search_request", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                  anime_search_filter: { search: searchTerm, partial_match: true },
+                                  and_logic: false,
+                                  ignore_duplicate: false,
+                                  opening_filter: true,
+                                  ending_filter: true,
+                                  insert_filter: true,
+                                  normal_broadcast: true,
+                                  rebroadcast: true,
+                                  standard: true,
+                                  instrumental: true,
+                                  chanting: true,
+                                  character: true,
+                                }),
+                              });
+                              return res.json();
+                            }
+                        
+                            let results = await searchAniSongDB(animeTitle);
+                            
+                            if (!results?.length && oldestMedia.synonyms?.length) {
+                              for (const alt of oldestMedia.synonyms) {
+                                results = await searchAniSongDB(alt);
+                                if (results?.length) break;
+                              }
+                            }
+                        
+                            if (!results?.length) {
+                              themesList.innerHTML = \`
+                                <div class="error">
+                                  Not found on AniSongDB, searching on AnimeThemes...
+                                </div>
+                              \`;
+                              await new Promise(r => setTimeout(r, 1200));
+                              await fetchThemes("animethemes");
+                              return;
+                            }
+                        
+                            const filtered = results.filter(r => r.linked_ids?.anilist === parsedId);
+                            
+                            if (!filtered.length) {
+                              themesList.innerHTML = \`
+                                <div class="error">
+                                  Not found on AniSongDB, searching on AnimeThemes...
+                                </div>
+                              \`;
+                              await new Promise(r => setTimeout(r, 1200));
+                              await fetchThemes("animethemes");
+                              return;
+                            }
+                        
+                            const songMap = new Map();
+                            
+                            for (const r of filtered) {
+                              const video = r.MQ || r.HQ;
+                              if (!video) continue;
+                              
+                              const url = \`https://naedist.animemusicquiz.com/\${video}\`;
+                              const themeType = r.songType
+                                .replace("Opening", "OP")
+                                .replace("Ending", "ED")
+                                .replace("Insert Song", "IN");
+                              const key = \`\${themeType}-\${r.songName}\`;
+                              
+                              if (!songMap.has(key)) {
+                                songMap.set(key, {
+                                  themeType,
+                                  songName: r.songName,
+                                  artist: r.songArtist,
+                                  videoUrl: url,
+                                  anime: r.animeENName || r.animeJPName,
+                                });
+                              }
+                            }
+                        
+                            const sorted = Array.from(songMap.values()).sort((a, b) => {
+                              const order = { OP: 1, ED: 2, IN: 3 };
+                              const typeA = a.themeType.match(/[A-Z]+/)[0];
+                              const typeB = b.themeType.match(/[A-Z]+/)[0];
+                              const numA = parseInt(a.themeType.match(/\\d+/)?.[0] || "0");
+                              const numB = parseInt(b.themeType.match(/\\d+/)?.[0] || "0");
+                              return order[typeA] - order[typeB] || numA - numB;
+                            });
+                        
+                            const html = sorted
+                              .map(t => \`
+                                <div class="theme-item" data-anime="\${t.anime}" data-type="\${t.themeType}" data-song="\${t.songName}" data-video="\${t.videoUrl}">
+                                  <span class="theme-type">\${t.themeType}</span>
+                                  <span>\${t.songName}</span>
+                                  \${t.artist ? \`<div class="artist">\${t.artist}</div>\` : ""}
+                                </div>\`)
+                              .join("");
+                        
+                            themesList.innerHTML = html || '<div class="error">No themes</div>';
+                            setupThemeClickHandlers();
+                            
+                          } catch (err) {
+                              console.error("✗ Failed to fetch themes:", err);
+                              if (provider === "anisongdb") {
+                                themesList.innerHTML = \`
+                                  <div class="error">
+                                    Not found on AniSongDB, searching on AnimeThemes...
+                                  </div>
+                                \`;
+                                await new Promise(r => setTimeout(r, 1200));
+                                await fetchThemes("animethemes");
+                              }
+                            }
                         }
 
                         function setupThemeClickHandlers() {
@@ -552,12 +469,12 @@ function init() {
                             if (!videoLink) { return }
                             
                             videoContainer.classList.add("active");
-                              toggleListBtn.classList.add("visible");
-                              hideVideoBtn.classList.add("visible");
+                            toggleListBtn.classList.add("visible");
+                            hideVideoBtn.classList.add("visible");
           
-                              if (animeTitleEl) { animeTitleEl.textContent = \`\${animeName} - \${songName}\`;}
+                            if (animeTitleEl) { animeTitleEl.textContent = \`\${animeName} - \${songName}\`;}
           
-                              if (!video) {
+                            if (!video) {
                                 video = document.createElement("video");
                                 video.controls = false;
                                 video.volume = currentVolume;
@@ -576,31 +493,27 @@ function init() {
                                 video.addEventListener("ended", () => {
                                   playBtn.textContent = "▶";
                                 });
-                              } else {
+                            } else {
                                 video.pause();
                                 video.currentTime = 0;
-                              }
+                            }
           
-                              video.src = videoLink;
+                            video.src = videoLink;
                               
-                              if (shouldAutoplay) {
+                            if (shouldAutoplay) {
                                 video.play();
                                 playBtn.textContent = "⏸";
-                              } else { playBtn.textContent = "▶"; }
+                            } else { playBtn.textContent = "▶"; }
                           }
                           
-                          themeItems.forEach(item => {
-                            item.addEventListener("click", () => {
-                              playTheme(item, true);
-                            });
-                          });
-                          
-                          if (AUTOPLAY && themeItems.length > 0) {
+                        themeItems.forEach(item => { item.addEventListener("click", () => { playTheme(item, true); }); });
+                        
+                        if (AUTOPLAY && themeItems.length > 0) {
                             const firstOP = Array.from(themeItems).find(item => {
                               const themeType = item.getAttribute("data-type");
                               return themeType && themeType.startsWith("OP");
                             });
-                            
+                              
                             if (firstOP) {
                               themesList.classList.add("hidden");
                               isListVisible = false;
@@ -613,24 +526,17 @@ function init() {
                 
                         toggleListBtn.addEventListener("click", () => {
                           isListVisible = !isListVisible;
-                          if (isListVisible) {
-                            themesList.classList.remove("hidden");
-                            toggleListBtn.textContent = "☰";
-                          } else {
-                            themesList.classList.add("hidden");
-                            toggleListBtn.textContent = "☰";
-                          }
+                          toggleListBtn.textContent = "☰";
+                          if (isListVisible) { themesList.classList.remove("hidden");} 
+                          else { themesList.classList.add("hidden");}
                         });
 
                         hideVideoBtn.addEventListener("click", () => {
                           isVideoVisible = !isVideoVisible;
-                          if (isVideoVisible) {
-                            videoContainer.classList.remove("hidden-video");
-                            hideVideoBtn.textContent = "👁";
-                          } else {
-                            videoContainer.classList.add("hidden-video");
-                            hideVideoBtn.textContent = "👁";
-                          }
+                          hideVideoBtn.textContent = "👁";
+
+                          if (isVideoVisible) { videoContainer.classList.remove("hidden-video");} 
+                          else { videoContainer.classList.add("hidden-video");}
                         });
                 
                         playBtn.addEventListener("click", () => {
@@ -688,11 +594,8 @@ function init() {
                 
                         fullscreenBtn.addEventListener("click", () => {
                           if (video) {
-                            if (video.requestFullscreen) {
-                              video.requestFullscreen();
-                            } else if (video.webkitRequestFullscreen) {
-                              video.webkitRequestFullscreen();
-                            }
+                            if (video.requestFullscreen) { video.requestFullscreen();} 
+                            else if (video.webkitRequestFullscreen) { video.webkitRequestFullscreen();}
                           }
                         });
                 
@@ -716,7 +619,6 @@ function init() {
                 
                       })();
                     `);
-
                     body.append(script);
                 } catch (error) {
                     console.error("Error in plugin:", error);
