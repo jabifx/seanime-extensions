@@ -1,7 +1,7 @@
 {
   "id": "ui-translation",
   "name": "UI Translation",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "manifestURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/UI-Translation/manifest.json",
   "language": "typescript",
   "type": "plugin",

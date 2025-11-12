@@ -75,8 +75,6 @@ Upload local changes to AniList|Subir cambios locales a AniList|Téléverser les
 Select the media you want to save locally. Click on already saved media to remove it from local storage.|Selecciona el contenido que quieras guardar localmente. Haz clic en uno ya guardado para eliminarlo.|Sélectionnez les médias à enregistrer localement. Cliquez sur ceux déjà enregistrés pour les supprimer.|Seleziona i contenuti da salvare localmente. Clicca su quelli già salvati per rimuoverli.|Wähle Medien zum lokalen Speichern. Klicke auf gespeicherte, um sie zu entfernen.|Selecteer de media die je lokaal wilt opslaan. Klik op reeds opgeslagen media om deze uit de lokale opslag te verwijderen.|Selecione os conteúdos para salvar localmente. Clique nos já salvos para removê-los.|ローカルに保存したいメディアを選択します。すでに保存されているものをクリックすると削除されます。|로컬에 저장할 미디어를 선택하세요. 이미 저장된 항목을 클릭하면 제거됩니다.|选择要本地保存的媒体。点击已保存的项目将其删除。|選取你想要本機儲存的媒體。點擊已儲存的媒體可將其從本機儲存中移除。|Point yer hook at the booty ye want to stow aboard. Point at already stowed booty to cast it from the hold.|Sewect teh media u want to save wocawwy. Cwick on awweady saved media to wemove it fwom wocaw stowage. :3|Sǝlǝɔʇ ʇɥǝ ɯǝpᴉɐ ʎon ʍɐuʇ ʇo sɐʌǝ loɔɐllʎ˙ Ɔlᴉɔʞ ou ɐlɹǝɐpʎ sɐʌǝp ɯǝpᴉɐ ʇo ɹǝɯoʌǝ ᴉʇ ɟɹoɯ loɔɐl sʇoɹɐƃǝ˙|Choose the entertainments thou wouldst preserve locally. Touch upon what is already preserved to banish it from thy coffers.|Dujvo' ba' vIneH De'mey wIv. ba'lu'pu' De'mey taH vIneH 'ej wIv.
 Save locally|Guardar localmente|Enregistrer localement|Salva localmente|Lokal speichern|Lokaal opslaan|Salvar localmente|ローカルに保存|로컬에 저장|本地保存|本機儲存|Stow it aboard|Save wocawwy|Sɐʌǝ loɔɐllʎ|Preserve Locally|Dujvo' ba'
 Current|En curso|En cours|In corso|Aktuell|Huidig|Atuais|現在|현재|当前|正在觀看|What's Happenin'|Cuwwent|Ɔnɹɹǝuʇ|At Present|DaHjaj
-Planning|Planeado|Prévu|Pianificato|Geplant|Gepland|Planejado|計画中|계획 중|计划中|計畫中|Plottin'|P-pwanning|Ԁlɐuuᴉuƃ|In Contemplation|Haw'
-Completed|Completado|Terminé|Completato|Abgeschlossen|Voltooid|Concluído|完了|완료|已完成|已完成|Done and Dusted|Finished! >w<|Ɔoɯdlǝʇǝp|Concluded|pItlh
 Your library is empty|Tu biblioteca está vacía|Votre bibliothèque est vide|La tua libreria è vuota|Deine Bibliothek ist leer|Je bibliotheek is leeg|Sua biblioteca está vazia|ライブラリは空です|라이브러리가 비어 있습니다|你的资料库是空的|你的資料庫是空的|Yer treasure trove be barren|Ur wibwawy iz empty. So sad. ;w;|⅄onɹ lᴉqɹɐɹʎ ᴉs ǝɯdʇʎ|Thy libray is barren|Dache'lIj lI'be'.
 Set the path to your local library and scan it|Establece la ruta a tu biblioteca local y escanéala|Définissez le chemin vers votre bibliothèque locale et scannez-la|Imposta il percorso della tua libreria locale e scansionala|Lege den Pfad zu deiner lokalen Bibliothek fest und scanne sie|Stel het pad naar je lokale bibliotheek in en scan deze|Defina o caminho da sua biblioteca local e escaneie-a|ローカルライブラリのパスを設定してスキャンします。|로컬 라이브러리 경로를 설정하고 스캔하세요.|设置本地资料库路径并扫描。|設定本機資料庫的路徑並進行掃描|Chart the course to yer treasure trove and give it a look-see|Set teh path to ur wocaw wibwawy and scan it pwease|Sǝʇ ʇɥǝ dɐʇɥ ʇo ʎonɹ loɔɐl lᴉqɹɐɹʎ ɐup sɔɐu ᴉʇ|Decree the way to thy local libray and scrutinize it|Duj Dache'lIjvaD HeH mu'tlhegh 'ej nej.
 Include online streaming in your library|Incluir streaming online en tu biblioteca|Inclure le streaming en ligne dans votre bibliothèque|Includi lo streaming online nella tua libreria|Online-Streaming in Bibliothek aufnehmen|Online streaming opnemen in je bibliotheek|Incluir streaming online na biblioteca|オンラインストリーミングをライブラリに含める|온라인 스트리밍을 라이브러리에 포함|在资料库中包含在线播放|在資料庫中包含線上串流|Let sea shanties in yer trove|Incwude onwine stweaming in ur wibwawy|Iuɔlnpǝ oulᴉuǝ sʇɹǝɐɯᴉuƃ ᴉu ʎonɹ lᴉqɹɐɹʎ|Admit the Æther's stream into thy libray|pa'vo' yotmey Dache'Daq SIQ.
@@ -90,9 +88,6 @@ Spring|Primavera|Printemps|Primavera|Frühling|Lente|Primavera|春|봄|春季|�
 days|días|jours|giorni|Tage|dagen|dias|日間|일|天|天數|suns|dayz|pɐʎs|days|jatlh
 Add to list|Agregar a la lista|Ajouter à la liste|Aggiungi alla lista|Zur Liste hinzufügen|Toevoegen aan lijst|Adicionar à lista|リストに追加|목록에 추가|添加到列表|加入清單|Add to the log|Add to wist|∀pp ʇo lᴉsʇ|Add to the Roll|DI'Daq SIQ
 Releasing now|En emisión ahora|En diffusion maintenant|In uscita ora|Läuft gerade|Wordt nu uitgebracht|Transmitindo agora|現在放送中|현재 방영 중|正在连载|正在播出|Makin' landfall now|Weweasing meow!|Rǝlǝɐsᴉuƃ uoʍ|Forthcoming Anon|pach DaHjaj
-Episode|Episodio|Épisode|Episodi|Episode|Aflevering|Episódio|エピソード|에피소드|剧集|集數|Tale|Epawsode|Ǝdᴉsopǝ|Chapter|cha'
-Episodes|Episodios|Épisodes|Episodi|Episoden|Afleveringen|Episódios|エピソード|에피소드|剧集|劇集|Tales|Epawsodes|Ǝdᴉsopǝs|Chapters|cha'mey
-released|lanzados|sorti|rilasciati|veröffentlicht|uitgebracht|lançado|リリースされた|출시됨|发布All|已發佈|set sail|weweased|ɹǝlǝɐsǝp|brought forth|pach
 Todo|Tout|Tutti|Alle|Tudo|Te doen|すべて|전체|全部||待辦|The Black Spot|To Do uwu|┴opo|Matters to Attend|ghoj
 Action|Acción|Action|Azione|Action|Actie|Ação|アクション|액션|动作|動作|Swashbucklin'|Action!|∀ɔʇᴉou|Action|Qap
 Adventure|Aventura|Aventure|Avventura|Abenteuer|Avontuur|Aventura|アドベンチャー|모험|冒险|冒險|Grand Voyage|Adventuwe|∀pʌǝuʇnɹǝ|Adventure|oy'
@@ -120,12 +115,6 @@ Friday|Viernes|Vendredi|Venerdì|Freitag|Vrijdag|Sexta|金曜日|금요일|星�
 Saturday|Sábado|Samedi|Sabato|Samstag|Zaterdag|Sábado|土曜日|토요일|星期六|星期六|Saturday|Caturday|Sɐʇnɹpɐʎ|Saturday|jaj Soch
 Sunday|Domingo|Dimanche|Domenica|Sonntag|Zondag|Domingo|日曜日|일요일|星期日|星期日|Sunday|Sunday|Snupɐʎ|Sunday|jaj chorgh
 Status|Estado|Statut|Stato|Status|Status|Status|ステータス|상태|状态|狀態|Ship's Condition|Status|Sʇɐʇns|State|ro'
-Completed|Completado|Terminé|Completato|Abgeschlossen|Voltooid|Concluído|完了|완료|已完成|已完成|Done and Dusted|Fin-fin!|Ɔoɯdlǝʇǝp|Concluded|pItlh
-Paused|Pausado|En pause|In pausa|Pausiert|Gepauzeerd|Pausado|一時停止|일시 중지|已暂停|已暫停|Becalmed|Pawwsed|Ԁɐnsǝp|Put to a Stand|mej
-Planning|Planeado|Prévu|Pianificato|Geplant|Gepland|Planejado|計画中|계획 중|计划中|計畫中|Plottin'|P-pwanning|Ԁlɐuuᴉuƃ|In Contemplation|Haw'
-Dropped|Abandonado|Abandonné|Abbandonato|Abgebrochen|Gestopt|Abandonado|中止|하차|已弃坑|已棄番|Cast Overboard|Dwopped ;w;|Dɹoddǝp|Forsaken|tu'
-Repeating|Repitiendo|En répétition|Ripetendo|Wiederholung|Herhalend|Repetindo|再視聴中|반복 중|重温中|重看中|On the Loop|Wepeating|Rǝdǝɐʇᴉuƃ|In Recurrence|tlha'
-released|lanzado|sorti|rilasciati|veröffentlicht|uitgebracht|lançado|リリースされた|출시됨|发布|已發佈|set sail|weweased|ɹǝlǝɐsǝp|brought forth|pach
 Indicate watched episodes|Marcar episodios vistos|Indiquer les épisodes vus|Segna episodi visti|Gesehene Episoden markieren|Bekeken afleveringen aangeven|Indicar episódios assistidos|視聴済みエピソードを表示|시청한 에피소드 표시|标记已观看集数|標示已觀看的集數|Mark tales as gazed upon|Indicate watched epawsodes|Iupᴉɔɐʇǝ ʍɐʇɔɥǝp ǝdᴉsopǝs|Declare chapters beheld|yotlu' cha'mey mu'qaD
 Disable image transitions|Desactivar transiciones de imagen|Désactiver les transitions d’image|Disattiva le transizioni d’immagine|Bildübergänge deaktivieren|Beeldovergangen uitschakelen|Desativar transições de imagem|画像切り替えを無効化|이미지 전환 비활성화|禁用图像切换|停用圖片轉場效果|Keelhaul picture transitions|Disabwe image twansitions|Dᴉsɐqlǝ ᴉɯɐƃǝ ʇɹɐusᴉʇᴉous|Forbid the shifting of visages|Hoch qon NISwI'
 Coming up next|A continuación|À suivre|In arrivo|Als Nächstes|Binnenkort|A seguir|次に|다음 예정|接下来|即將播出|On the horizon|Coming up next! owo|Ɔoɯᴉuƃ nd uǝxʇ|What follows anon|latlhDI'
@@ -545,7 +534,6 @@ movies|Películas|Films|Film|Filme|films|Filmes|映画|영화|电影|電影|movi
 Anime library|Biblioteca de anime|Bibliothèque anime|Libreria anime|Anime-Bibliothek|Anime-bibliotheek|Biblioteca de anime|アニメライブラリ|애니메이션 라이브러리|动漫库|動畫庫|Treasure Trove o' Tales|Anime wibwawy|∀uᴉɯǝ lᴉqɹɐɹʎ|The Libray of Animations|parmaq
 Upload local lists to AniList|Subir listas locales a AniList|Téléverser les listes locales sur AniList|Carica liste locali su AniList|Lokale Listen zu AniList hochladen|Lokale lijsten uploaden naar AniList|Enviar listas locais para AniList|ローカルリストをAniListにアップロード|로컬 리스트를 AniList에 업로드|上传本地列表到AniList|上傳本地清單至 AniList|Hoist local logs to AniList|Upwoad wocaw wists to AniList|Udloɐp loɔɐl lᴉsʇs ʇo ∀uᴉ˥ᴉsʇ|Convey local rolls unto AniList|Seanime 9 HolDaq 'el.
 Refresh sources|Actualizar fuentes|Actualiser les sources|Aggiorna fonti|Quellen aktualisieren|Bronnen vernieuwen|Atualizar fontes|ソースを更新|소스 새로고침|刷新来源|重新整理來源|Freshen the ports|Wefwesh sauces|Rǝɟɹǝsɥ sonɹɔǝs|Renew the wellsprings|pach ghorgh
-Reading|Leyendo|Lecture|Lettura|Lesen|Lezen|Lendo|読書中|읽는 중|阅读中|閱讀中|Readin'|Weading|Rǝɐpᴉuƃ|Perusing|pa' 'el
 Read|Leer|Lire|Leggere|Lesen|Gelezen|Ler|読む|읽기|阅读|已讀|Read|Wead|Rǝɐp|Perused|pachDI'
 Translates Seanime UI into 9 different languages.|Traduce la interfaz de Seanime a 9 idiomas diferentes.|Traduit l'interface de Seanime en 9 langues différentes.|Traduce l'interfaccia di Seanime in 9 lingue diverse.|Übersetzt die Seanime-Oberfläche in 9 verschiedene Sprachen.|Vertaalt de Seanime UI in 9 verschillende talen.|Traduz a interface do Seanime para 9 idiomas diferentes.|SeanimeのUIを9つの言語に翻訳します。|Seanime UI를 9가지 언어로 번역합니다.|将Seanime界面翻译成9种语言。|將 Seanime 介面翻譯成 9 種不同語言。|Translates the Seanime look into 9 different tongues.|Twanswates Seanime UI into 9 diffewent wangwages. owo|┴ɹɐuslɐʇǝs Sǝɐuᴉɯǝ UI ᴉuʇo 6 pᴉɟɟǝɹǝuʇ lɐuƃnɐƃǝs˙|Translateth the Seanime visage into nine different tongues.|tlheghmey SIQ
 Airing schedule|Calendario de emisión|Calendrier de diffusion|Programma di messa in onda|Sendeplan|Uitzendschema|Cronograma de exibição|放送スケジュール|방송 일정|放送时间表|播出時間表|Landfall Chart|Aiwing skedool|∀ᴉɹᴉuƃ sɔɥǝpnlǝ|Bill of Airings|Hoch De' lI'
@@ -639,6 +627,11 @@ Mobile custom CSS|CSS personalizado para móviles|CSS personnalisé pour mobile|
 Legacy episode cards|Tarjetas de episodio heredadas|Cartes d’épisode héritées|Schede episodio legacy|Veraltete Episodenkarten|Verouderde afleveringkaarten|Cartões de episódio legados|旧エピソードカード|레거시 에피소드 카드|旧版剧集卡片|舊版劇集卡片|||||
 Customize the user interface|Personalizar la interfaz de usuario|Personnaliser l’interface utilisateur|Personalizza l’interfaccia utente|Benutzeroberfläche anpassen|De gebruikersinterface aanpassen|Personalizar a interface do usuário|ユーザーインターフェースをカスタマイズ|사용자 인터페이스 사용자 지정|自定义用户界面|自訂使用者介面|||||
 View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle anzeigen|Logboeken bekijken|Ver os registros|ログを表示|로그 보기|查看日志|查看日誌|||||
+key|es|fr|it|de|nl|pt|ja|ko|zh-CN|zh-TW|Pirate Speak|LOLCAT|Upside Down|Shakespearean|Klingon
+{0} episodes released|{0} episodios lanzados|{0} épisodes publiés|{0} episodi rilasciati|{0} Folgen veröffentlicht|{0} afleveringen uitgebracht|{0} episódios lançados|{0} エピソードが公開されました|{0}개 에피소드가 공개되었습니다|已发布 {0} 集|已發布 {0} 集|Arrr, {0} tales be out!|{0} episoedz r out nao|{0} sǝdosıpǝ ǝsǝlǝǝɹ|{0} episodes hath been released|{0} qepmey vItlhutlhpu'
+Local library|Biblioteca local|Bibliothèque locale|Libreria locale|Lokale Bibliothek|Lokale bibliotheek|Biblioteca local|ローカルライブラリ|로컬 라이브러리|本地资料库|本地資料庫|Me local booty stash|Mah local bookz hoard|ʎɹɐɹɐᴉl lɐɔol|Thy local library|nugh QeD Qe'
+Episode {0}|Episodio {0}|Épisode {0}|Episodio {0}|Folge {0}|Aflevering {0}|Episódio {0}|エピソード {0}|에피소드 {0}|第 {0} 集|第 {0} 集|Tale {0}|Episoed {0}|ǝsodosıpǝ {0}|Episode the {0}|QeS {0}
+in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0} dagen.|em {0} dias.|{0}日後に|{0}일 후에|{0} 天后|{0} 天後|in {0} suns risin’s|in {0} dayz tiem|uʍop {0} sʎɐp|in {0} days hence.|{0} jajDaq
 `;
 
         function parseTranslations(csv) {
@@ -707,15 +700,8 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
             const existing = await ctx.dom.queryOne('script[data-ui-translator]');
             if (existing) {
                 console.log("⚠️ Cleaning past translator...");
-                try {
-                    if (window.__uiTranslatorObserver && typeof window.__uiTranslatorObserver.disconnect === 'function') {
-                        window.__uiTranslatorObserver.disconnect();
-                        window.__uiTranslatorObserver = null;
-                    }
-                    window.__uiTranslatorActive = null;
-                } catch(e) {
-                    console.error("Error:", e);
-                }
+                // NO INTENTES ACCEDER A window AQUÍ - Eso es código del servidor, no del navegador
+                // El script inyectado se limpiará solo
                 await existing.remove();
             }
 
@@ -723,19 +709,20 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
             const scriptContent = `
                 (function() {
                     try {                        
+                        // Limpiar traductor anterior (ESTO SÍ está dentro del navegador)
                         if (window.__uiTranslatorObserver && typeof window.__uiTranslatorObserver.disconnect === 'function') {
                             try { 
                                 window.__uiTranslatorObserver.disconnect(); 
                             } catch(e) {}
                             window.__uiTranslatorObserver = null;
                         }
-
+            
                         if (window.__uiTranslatorActive === "${toLang}") {
                             return;
                         }
-
+            
                         window.__uiTranslatorActive = "${toLang}";
-
+            
                         const translations = JSON.parse(decodeURIComponent("${encodeURIComponent(JSON.stringify(translations))}"));
                         const targetLang = "${toLang}";
                         const MAX_TEXT_LENGTH = 120;
@@ -743,7 +730,7 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
                         
                         const normalizeCache = new Map();
                         const languageIndex = new Map();
-
+            
                         for (const [lang, dict] of Object.entries(translations)) {
                             for (const [key, val] of Object.entries(dict)) {
                                 const norm = val.toLowerCase().replace(/\\u00A0/g, " ").replace(/\\s+/g, " ").trim();
@@ -753,7 +740,7 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
                                 languageIndex.get(norm).push({ lang, key });
                             }
                         }
-
+            
                         function normalizeText(s) {
                             if (normalizeCache.size > MAX_CACHE_SIZE) {
                                 normalizeCache.clear();
@@ -766,59 +753,134 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
                             normalizeCache.set(s, normalized);
                             return normalized;
                         }
-
+                        
+                        function matchPattern(text, pattern) {
+                            if (!pattern.includes('{0}')) return null;
+                            
+                            const parts = pattern.split('{0}');
+                            if (parts.length !== 2) return null;
+                            
+                            const [prefix, suffix] = parts;
+                            const prefixLower = prefix.toLowerCase().trim();
+                            const suffixLower = suffix.toLowerCase().trim();
+                            const textLower = text.toLowerCase().trim();
+                            
+                            if (textLower.startsWith(prefixLower) && textLower.endsWith(suffixLower)) {
+                                const start = prefix.length;
+                                const end = text.length - suffix.length;
+                                return [text, text.substring(start, end).trim()];
+                            }
+                            return null;
+                        }
+                                                
+                        function translateWithPattern(text, fromDict, toDict) {
+                            for (const key of Object.keys(fromDict)) {
+                                const sourcePattern = fromDict[key];
+                                if (!sourcePattern.includes('{0}')) continue;
+                                
+                                const match = matchPattern(text, sourcePattern);
+                                if (match && match[1]) {
+                                    const targetPattern = toDict[key];
+                                    if (targetPattern) {
+                                        return targetPattern.replace('{0}', match[1]);
+                                    }
+                                }
+                            }
+                            return null;
+                        }
+            
                         function detectLanguage(text) {
                             const norm = normalizeText(text);
                             const matches = languageIndex.get(norm);
                             return matches?.[0]?.lang || null;
                         }
-
+            
                         function translateNode(node) {
                             if (node.nodeType === Node.ELEMENT_NODE) {
-                                if (node.matches && node.matches('a.cursor-pointer, a.cursor-pointer *')) {
-                                    return;
+                                const textNodes = [];
+                                for (let child of node.childNodes) {
+                                    if (child.nodeType === Node.TEXT_NODE && child.textContent.trim()) {
+                                        textNodes.push(child);
+                                    }
                                 }
-                            }
-                            if (node.nodeType === Node.TEXT_NODE) {
-                                const text = node.textContent;
-                                if (!text) return;
-                                const normalized = normalizeText(text);
-                                if (!normalized || normalized.length > MAX_TEXT_LENGTH) return;
-
-                                const fromLang = detectLanguage(normalized);
-                                if (fromLang && translations[targetLang]) {
-                                    const keys = Object.keys(translations[fromLang]).sort((a, b) => b.length - a.length);
-                                    for (const key of keys) {
-                                        if (!translations[fromLang] || !translations[fromLang][key]) continue;
-                                        if (normalizeText(translations[fromLang][key]) === normalized) {
-                                            let newText = (translations[targetLang] && translations[targetLang][key]) ? translations[targetLang][key] : translations[fromLang][key];
+                                
+                                if (textNodes.length > 1) {
+                                    const combinedText = textNodes.map(n => n.textContent).join('');
+                                    const normalized = normalizeText(combinedText);
                                     
-                                            // Comprobar "Episode" (clave o texto) y envolver con espacios si aplica
-                                            const keyIsEpisode = String(key).trim().toLowerCase() === "episode";
-                                            const srcIsEpisode = normalizeText(translations[fromLang][key]) === "episode";
-                                            const tgtIsEpisode = normalizeText(newText) === "episode";
-                                            if (keyIsEpisode || srcIsEpisode || tgtIsEpisode) {
-                                                newText = " " + newText + " ";
+                                    if (normalized && normalized.length <= MAX_TEXT_LENGTH) {
+                                        // Intentar traducción con patrón primero
+                                        for (const lang of Object.keys(translations)) {
+                                            if (lang === targetLang) continue;
+                                            const patternResult = translateWithPattern(
+                                                combinedText,
+                                                translations[lang],
+                                                translations[targetLang]
+                                            );
+                                            if (patternResult) {
+                                                // Reemplazar todos los nodos de texto con el resultado
+                                                textNodes[0].textContent = patternResult;
+                                                for (let i = 1; i < textNodes.length; i++) {
+                                                    textNodes[i].textContent = '';
+                                                }
+                                                return;
                                             }
-                                            node.textContent = newText;
-
-                                            if ((keyIsEpisode || srcIsEpisode || tgtIsEpisode) && node.nextSibling) {
-                                                const next = node.nextSibling;
-                                                if (next.nodeType === Node.TEXT_NODE && next.textContent.trim() === "s") {
-                                                    next.textContent = "";
+                                        }
+                                        
+                                        const fromLang = detectLanguage(normalized);
+                                        if (fromLang && translations[targetLang]) {
+                                            const keys = Object.keys(translations[fromLang]).sort((a, b) => b.length - a.length);
+                                            for (const key of keys) {
+                                                if (normalizeText(translations[fromLang][key]) === normalized) {
+                                                    let newText = translations[targetLang][key] || translations[fromLang][key];
+                                                    
+                                                    const keyIsEpisode = String(key).trim().toLowerCase() === "episode";
+                                                    const srcIsEpisode = normalizeText(translations[fromLang][key]) === "episode";
+                                                    const tgtIsEpisode = normalizeText(newText) === "episode";
+                                                    if (keyIsEpisode || srcIsEpisode || tgtIsEpisode) {
+                                                        newText = " " + newText + " ";
+                                                    }
+                                                    
+                                                    textNodes[0].textContent = newText;
+                                                    for (let i = 1; i < textNodes.length; i++) {
+                                                        textNodes[i].textContent = '';
+                                                    }
+                                                    
+                                                    if ((keyIsEpisode || srcIsEpisode || tgtIsEpisode) && textNodes[textNodes.length - 1].nextSibling) {
+                                                        const next = textNodes[textNodes.length - 1].nextSibling;
+                                                        if (next.nodeType === Node.TEXT_NODE && next.textContent.trim() === "s") {
+                                                            next.textContent = "";
+                                                        }
+                                                    }
+                                                    return;
                                                 }
                                             }
-                                            
-                                            break;
                                         }
                                     }
                                 }
-                            } else if (node.nodeType === Node.ELEMENT_NODE) {
+                                
+                                // Procesar atributos
                                 ["placeholder", "title", "alt", "aria-label", "value"].forEach(attr => {
                                     const val = node.getAttribute(attr);
                                     if (val) {
                                         const normVal = normalizeText(val);
                                         if (normVal.length > MAX_TEXT_LENGTH) return;
+                                        
+                                        // Intentar patrón primero para atributos
+                                        for (const lang of Object.keys(translations)) {
+                                            if (lang === targetLang) continue;
+                                            const patternResult = translateWithPattern(
+                                                val,
+                                                translations[lang],
+                                                translations[targetLang]
+                                            );
+                                            if (patternResult) {
+                                                node.setAttribute(attr, patternResult);
+                                                return;
+                                            }
+                                        }
+                                        
+                                        // Traducción exacta para atributos
                                         const fromLang = detectLanguage(normVal);
                                         if (fromLang && translations[targetLang]) {
                                             const keys = Object.keys(translations[fromLang]).sort((a, b) => b.length - a.length);
@@ -834,14 +896,66 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
                                         }
                                     }
                                 });
-
+                        
+                                // Procesar hijos recursivamente
                                 for (let child of node.childNodes) translateNode(child);
                                 if (node.shadowRoot) translateNode(node.shadowRoot);
                             }
+                            
+                            // Procesar nodos de texto individuales
+                            if (node.nodeType === Node.TEXT_NODE) {
+                                const text = node.textContent;
+                                if (!text || !text.trim()) return;
+                                const normalized = normalizeText(text);
+                                if (!normalized || normalized.length > MAX_TEXT_LENGTH) return;
+                        
+                                // PRIMERO: Intentar traducción con patrón en todos los idiomas
+                                for (const lang of Object.keys(translations)) {
+                                    if (lang === targetLang) continue;
+                                    const patternResult = translateWithPattern(
+                                        text,
+                                        translations[lang],
+                                        translations[targetLang]
+                                    );
+                                    if (patternResult) {
+                                        node.textContent = patternResult;
+                                        return;
+                                    }
+                                }
+                        
+                                // SEGUNDO: Traducción exacta
+                                const fromLang = detectLanguage(normalized);
+                                if (fromLang && translations[targetLang]) {
+                                    const keys = Object.keys(translations[fromLang]).sort((a, b) => b.length - a.length);
+                                    for (const key of keys) {
+                                        if (!translations[fromLang] || !translations[fromLang][key]) continue;
+                                        if (normalizeText(translations[fromLang][key]) === normalized) {
+                                            let newText = (translations[targetLang] && translations[targetLang][key]) ? translations[targetLang][key] : translations[fromLang][key];
+                                    
+                                            const keyIsEpisode = String(key).trim().toLowerCase() === "episode";
+                                            const srcIsEpisode = normalizeText(translations[fromLang][key]) === "episode";
+                                            const tgtIsEpisode = normalizeText(newText) === "episode";
+                                            if (keyIsEpisode || srcIsEpisode || tgtIsEpisode) {
+                                                newText = " " + newText + " ";
+                                            }
+                                            node.textContent = newText;
+                        
+                                            if ((keyIsEpisode || srcIsEpisode || tgtIsEpisode) && node.nextSibling) {
+                                                const next = node.nextSibling;
+                                                if (next.nodeType === Node.TEXT_NODE && next.textContent.trim() === "s") {
+                                                    next.textContent = "";
+                                                }
+                                            }
+                                            
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
                         }
-
+            
                         translateNode(document.body);
-
+            
                         const observer = new MutationObserver((mutations) => {
                             for (const m of mutations) {
                                 for (const n of m.addedNodes) translateNode(n);
@@ -849,7 +963,7 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
                         });
                         observer.observe(document.body, { childList: true, subtree: true, characterData: true });
                         window.__uiTranslatorObserver = observer;
-
+            
                         function _cleanup() {
                             try {
                                 if (window.__uiTranslatorObserver && typeof window.__uiTranslatorObserver.disconnect === 'function') {
@@ -861,8 +975,7 @@ View the logs|Ver los registros|Voir les journaux|Visualizza i log|Protokolle an
                         }
                         window.addEventListener("beforeunload", _cleanup);
                         window.addEventListener("pagehide", _cleanup);
-
-
+            
                     } catch (err) {
                         console.error("Error:", err);
                     }
