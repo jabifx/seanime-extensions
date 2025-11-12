@@ -227,7 +227,13 @@ function init() {
                               const animeData = data.anime?.[0];
                         
                               if (!animeData) {
-                                themesList.innerHTML = '<div class="error">Anime not found on Animethemes</div>';
+                                themesList.innerHTML = \`
+                                  <div class="error">
+                                    Not found on AnimeThemes, searching on AnisongDB...
+                                  </div>
+                                \`;
+                                await new Promise(r => setTimeout(r, 1200));
+                                await fetchThemes("anisongdb");
                                 return;
                               }
                               
@@ -236,7 +242,13 @@ function init() {
                         
                               const themes = animeData.animethemes || [];
                               if (themes.length === 0) {
-                                themesList.innerHTML = '<div class="error">Themes not found</div>';
+                                themesList.innerHTML = \`
+                                  <div class="error">
+                                   Themes not found, searching on AnisongDB...
+                                  </div>
+                                \`;
+                                await new Promise(r => setTimeout(r, 1200));
+                                await fetchThemes("anisongdb");
                                 return;
                               }
                         
@@ -328,9 +340,8 @@ function init() {
                               return oldest;
                             }
                         
+                            animeTitle = media.title.romaji || media.title.english || media.title.native;
                             const oldestMedia = await getOldestPrequel(media);
-                            const titleData = oldestMedia.title;
-                            animeTitle = titleData.romaji || titleData.english || titleData.native;
                             
                             if (!animeTitle) {
                               themesList.innerHTML = '<div class="error">Anime not found</div>';
@@ -355,35 +366,43 @@ function init() {
                                   standard: true,
                                   instrumental: true,
                                   chanting: true,
-                                  character: true,
-                                }),
+                                  character: true
+                                })
                               });
                               return res.json();
                             }
                         
                             let results = await searchAniSongDB(animeTitle);
                             
-                            if (!results?.length && oldestMedia.synonyms?.length) {
-                              for (const alt of oldestMedia.synonyms) {
-                                results = await searchAniSongDB(alt);
-                                if (results?.length) break;
+                            if ((!results?.length) && oldestMedia?.title) {
+                              const altTitle =
+                                oldestMedia.title.romaji ||
+                                oldestMedia.title.english ||
+                                oldestMedia.title.native;
+                              await new Promise(r => setTimeout(r, 150));
+                              const fallbackResults = await searchAniSongDB(altTitle);
+                              if (fallbackResults?.length) {
+                                results = [...results, ...fallbackResults];
                               }
                             }
-                        
-                            if (!results?.length) {
-                              themesList.innerHTML = \`
-                                <div class="error">
-                                  Not found on AniSongDB, searching on AnimeThemes...
-                                </div>
-                              \`;
-                              await new Promise(r => setTimeout(r, 1200));
-                              await fetchThemes("animethemes");
-                              return;
-                            }
-                        
-                            const filtered = results.filter(r => r.linked_ids?.anilist === parsedId);
                             
-                            if (!filtered.length) {
+                            if ((!results?.length) && media.synonyms?.length) {
+                              for (const alt of media.synonyms) {
+                                await new Promise(r => setTimeout(r, 150));
+                                const altResults = await searchAniSongDB(alt);
+                                if (altResults?.length) {
+                                  results = [...results, ...altResults];
+                                  break;
+                                }
+                              }
+                            }
+                            
+                            const hasCurrentId = results?.some(r => {
+                              const ids = r.linked_ids?.anilist;
+                              return Array.isArray(ids) ? ids.includes(parsedId) : ids === parsedId;
+                            });
+                            
+                            if (!results?.length || !hasCurrentId) {
                               themesList.innerHTML = \`
                                 <div class="error">
                                   Not found on AniSongDB, searching on AnimeThemes...
@@ -441,7 +460,7 @@ function init() {
                             
                           } catch (err) {
                               console.error("✗ Failed to fetch themes:", err);
-                              if (provider === "anisongdb") {
+                              if (PROVIDER === "anisongdb") {
                                 themesList.innerHTML = \`
                                   <div class="error">
                                     Not found on AniSongDB, searching on AnimeThemes...
@@ -449,6 +468,15 @@ function init() {
                                 \`;
                                 await new Promise(r => setTimeout(r, 1200));
                                 await fetchThemes("animethemes");
+                              }
+                              else {
+                                themesList.innerHTML = \`
+                                  <div class="error">
+                                    Not found on AnimeThemes, searching on AniSongDB...
+                                  </div>
+                                \`;
+                                await new Promise(r => setTimeout(r, 1200));
+                                await fetchThemes("anisongdb");
                               }
                             }
                         }
