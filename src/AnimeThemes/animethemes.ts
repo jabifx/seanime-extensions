@@ -415,6 +415,11 @@ function init() {
                         
                             const songMap = new Map();
                             
+                            const filtered = results.filter(r => {
+                              const ids = r.linked_ids?.anilist;
+                              return Array.isArray(ids) ? ids.includes(parsedId) : ids === parsedId;
+                            });
+                            
                             for (const r of filtered) {
                               const video = r.MQ || r.HQ;
                               if (!video) continue;
