@@ -14,7 +14,29 @@ class Provider {
     }
 
     private buildMagnet(infoHash: string, name: string): string {
-        return `magnet:?xt=urn:btih:${infoHash}&dn=${encodeURIComponent(name)}`;
+        const trackers = [
+            "udp://tracker.opentrackr.org:1337/announce",
+            "udp://open.stealth.si:80/announce",
+            "udp://tracker.torrent.eu.org:451/announce",
+            "udp://tracker.dler.org:6969/announce",
+            "udp://public.popcorn-tracker.org:6969/announce",
+            "udp://open.demonii.com:1337/announce",
+            "udp://glotorrents.pw:6969/announce",
+
+            "udp://exodus.desync.com:6969",
+            "udp://tracker.internetwarriors.net:1337",
+            "udp://p4p.arenabg.com:1337",
+            "udp://tracker.coppersurfer.tk:6969",
+            "udp://torrent.gresille.org:80/announce",
+            "udp://tracker.leechers-paradise.org:6969",
+            "udp://tracker.bittor.pw:1337"
+        ];
+
+        const tr = trackers
+            .map(t => `&tr=${encodeURIComponent(t)}`)
+            .join("");
+
+        return `magnet:?xt=urn:btih:${infoHash}&dn=${encodeURIComponent(name)}${tr}`;
     }
 
     private extractResolution(name: string): string {
@@ -39,7 +61,7 @@ class Provider {
                 downloadCount: 0,
                 link: `${this.api}/torrent/${t.id}`,
                 downloadUrl: "",
-                magnetLink: infoHash ? this.buildMagnet(infoHash, t.name) : null,
+                magnetLink: infoHash ? this.buildMagnet(infoHash, t.name).replace("\u0026", "&") : null,
                 infoHash: infoHash,
                 resolution: this.extractResolution(t.name),
                 isBatch: false,
