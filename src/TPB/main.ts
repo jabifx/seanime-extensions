@@ -48,7 +48,9 @@ class Provider {
         const res = await fetch(`${this.api}/q.php?q=${encodeURIComponent(opts.query)}&cat=200`);
         const json = await res.json();
 
-        return json.map((t: any): AnimeTorrent => {
+        const filtered = json.filter((t: any) => Number(t.seeders) > 0);
+
+        return filtered.map((t: any): AnimeTorrent => {
             const infoHash = t.info_hash || null;
 
             return {
