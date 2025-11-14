@@ -42,7 +42,6 @@ class Provider implements CustomSource {
 
         const typeSimkl = typeMap?.[id] ?? 'anime';
 
-        // si es película, no pedir nada
         if (typeSimkl === 'movie') {
             const cachedTitle = mediaCache?.[id]?.title;
             return {
@@ -94,12 +93,12 @@ class Provider implements CustomSource {
                     tvdbId: 0,
                     anidbEid: 0,
                     title: ep.title ?? `Episode ${episodeNumber}`,
-                    image,
+                    image: image,
                     airDate: this.parseDate(ep.date),
                     length: 24,
                     summary: ep.description ?? '',
                     overview: ep.description ?? '',
-                    episodeNumber,
+                    episodeNumber: episodeNumber,
                     episode: episodeNumber.toString(),
                     seasonNumber: 1,
                     absoluteEpisodeNumber: episodeNumber,
@@ -186,7 +185,7 @@ class Provider implements CustomSource {
 
         const typeStore: Record<number, "anime" | "tv" | "movie"> = {};
         const media: AL_BaseAnime[] = allResults.map((item: any) => {
-            const posterPath = item.poster ? `https://simkl.in/posters/${item.poster}_w.jpg` : "";
+            const posterPath = item.poster ? `https://simkl.in/posters/${item.poster}_` : "";
             const title = item.title ?? item.show_title ?? item.movie_title ?? "";
 
             const base: AL_BaseAnime = {
@@ -199,9 +198,9 @@ class Provider implements CustomSource {
                     native: title,
                 },
                 coverImage: {
-                    large: posterPath,
-                    medium: posterPath,
-                    extraLarge: posterPath,
+                    large: posterPath + "m.jpg",
+                    medium: posterPath + "m.jpg",
+                    extraLarge: posterPath + "m.jpg",
                     color: "",
                 },
                 description: item.overview ?? "",
@@ -209,14 +208,14 @@ class Provider implements CustomSource {
                 meanScore: item.ratings?.simkl?.rating ? Math.round(item.ratings.simkl.rating * 10) : 0,
                 synonyms: item?.all_titles || [],
                 status: item.status?.toUpperCase() ?? "FINISHED",
-                bannerImage: posterPath,
+                bannerImage: posterPath + "w.jpg",
                 episodes: item.total_episodes || item.ep_count || 1,
                 type: "ANIME",
                 format: item.anime_type?.toUpperCase() || item.type?.toUpperCase() || "TV",
                 seasonYear: item.year,
                 isAdult: item.adult ?? false,
-                startDate: { year: 2000, month: 1, day: 1 },
-                endDate: { year: 2000, month: 1, day: 1 },
+                startDate: { year: item.year, month: 1, day: 1 },
+                endDate: { year: item.year, month: 1, day: 1 },
             };
 
             typeStore[base.id] = item._typeSimkl;
