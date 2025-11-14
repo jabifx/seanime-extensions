@@ -63,7 +63,7 @@ class Provider {
                 downloadCount: 0,
                 link: `${this.api}/torrent/${t.id}`,
                 downloadUrl: "",
-                magnetLink: infoHash ? this.buildMagnet(infoHash, t.name).replace("\u0026", "&") : null,
+                magnetLink: infoHash ? this.buildMagnet(infoHash, t.name) : null,
                 infoHash: infoHash,
                 resolution: this.extractResolution(t.name),
                 isBatch: false,
