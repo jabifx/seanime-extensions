@@ -1,6 +1,6 @@
-/// <reference path="./manga-provider.d.ts" />
 
 class Provider implements CustomSource {
+
     getSettings(): Settings {
         return {
             supportsAnime: false,
@@ -11,9 +11,9 @@ class Provider implements CustomSource {
     private uuidToNumber(uuid: string): number {
         let hash = 0;
         for (let i = 0; i < uuid.length; i++) {
-            hash = (hash * 31 + uuid.charCodeAt(i)) >>> 0;
+            hash = (hash * 31 + uuid.charCodeAt(i)) % 1_000_000_000_000; // 10^12
         }
-        return hash % 268435456;
+        return hash;
     }
 
     private parseDate(dateStr?: string) {
