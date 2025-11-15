@@ -21,12 +21,12 @@ class Provider implements CustomSource {
         const cachedResults: $app.AL_BaseAnime[] = []
 
         for (const id of ids) {
-            const cached = mediaCache?.[id]
-            if (cached) {
-                cachedResults.push(cached)
-            } else {
-                idsToFetch.push(id)
-            }
+            // const cached = mediaCache?.[id]
+            // if (cached) {
+            //     cachedResults.push(cached)
+            // } else {
+            idsToFetch.push(id)
+            // }
         }
 
         if (idsToFetch.length > 0) {
@@ -165,34 +165,34 @@ class Provider implements CustomSource {
         const types: ("anime" | "tv" | "movie")[] = ["tv", "anime", "movie"]
 
         for (const typeSimkl of types) {
-            if (typeSimkl === "movie") {
-                const metadata: $app.Metadata_AnimeMetadata = {
-                    titles: { en: cachedTitle?.english ?? cachedTitle?.native ?? "Movie" },
-                    episodes: {
-                        "1": {
-                            anidbId: 0,
-                            tvdbId: 0,
-                            anidbEid: 0,
-                            title: cachedTitle?.english ?? cachedTitle?.native ?? "Movie",
-                            image: "",
-                            airDate: "",
-                            length: 90,
-                            summary: "",
-                            overview: "",
-                            episodeNumber: 1,
-                            episode: "1",
-                            seasonNumber: 1,
-                            absoluteEpisodeNumber: 1,
-                            hasImage: false,
-                        },
-                    },
-                    episodeCount: 1,
-                    specialCount: 0,
-                }
-
-                $store.set("simkl.metadata", { ...metadataCache, [id]: metadata })
-                return metadata
-            }
+            // if (typeSimkl === "movie") {
+            //     const metadata: $app.Metadata_AnimeMetadata = {
+            //         titles: { en: cachedTitle?.english ?? cachedTitle?.native ?? "Movie" },
+            //         episodes: {
+            //             "1": {
+            //                 anidbId: 0,
+            //                 tvdbId: 0,
+            //                 anidbEid: 0,
+            //                 title: cachedTitle?.english ?? cachedTitle?.native ?? "Movie",
+            //                 image: "",
+            //                 airDate: "",
+            //                 length: 90,
+            //                 summary: "",
+            //                 overview: "",
+            //                 episodeNumber: 1,
+            //                 episode: "1",
+            //                 seasonNumber: 1,
+            //                 absoluteEpisodeNumber: 1,
+            //                 hasImage: false,
+            //             },
+            //         },
+            //         episodeCount: 1,
+            //         specialCount: 0,
+            //     }
+            //
+            //     $store.set("simkl.metadata", { ...metadataCache, [id]: metadata })
+            //     return metadata
+            // }
 
 
             const endpoint = `https://api.simkl.com/${typeSimkl}/episodes/${id}?extended=full&client_id=${this.api_key}`
@@ -204,19 +204,41 @@ class Provider implements CustomSource {
                 const data = await res.json()
                 if (!Array.isArray(data)) continue // try next
 
+                // First pass: calculate episode counts per season to determine offsets
+                const seasonEpisodeCounts: Record<number, number> = {}
+                for (const ep of data) {
+                    const season = ep.season || 1
+                    const isSpecial = ep.type === "special"
+                    if (!isSpecial) {
+                        seasonEpisodeCounts[season] = (seasonEpisodeCounts[season] || 0) + 1
+                    }
+                }
+
+                // Calculate offsets for each season
+                const seasonOffsets: Record<number, number> = {}
+                const sortedSeasons = Object.keys(seasonEpisodeCounts).map(Number).sort((a, b) => a - b)
+                let cumulativeOffset = 0
+                for (const season of sortedSeasons) {
+                    seasonOffsets[season] = cumulativeOffset
+                    cumulativeOffset += seasonEpisodeCounts[season]
+                }
+
                 const episodes: Record<string, $app.Metadata_EpisodeMetadata> = {}
                 let specialCount = 0
 
                 for (const ep of data) {
-                    const episodeNumber = Number(ep.episode) || Object.keys(episodes).length + 1
+                    const episodeNumber = Number(ep.episode) || 1
+                    const season = ep.season || 1
                     const isSpecial = ep.type === "special"
                     if (isSpecial) specialCount++
 
+                    // Calculate absolute episode number by adding season offset
+                    const seasonOffset = isSpecial ? 0 : (seasonOffsets[season] || 0)
+                    const absoluteEpisodeNumber = seasonOffset + episodeNumber
+
                     const image = ep.img ? `https://simkl.in/episodes/${ep.img}_w.jpg` : ""
 
-                    if(!ep.aired) continue
-
-                    episodes[episodeNumber.toString()] = {
+                    episodes[absoluteEpisodeNumber.toString()] = {
                         anidbId: 0,
                         tvdbId: 0,
                         anidbEid: 0,
@@ -226,10 +248,10 @@ class Provider implements CustomSource {
                         length: 0,
                         summary: ep.description ?? "",
                         overview: ep.description ?? "",
-                        episodeNumber: episodeNumber,
-                        episode: episodeNumber.toString(),
-                        seasonNumber: 1,
-                        absoluteEpisodeNumber: episodeNumber,
+                        episodeNumber: absoluteEpisodeNumber,
+                        episode: absoluteEpisodeNumber.toString(),
+                        seasonNumber: season,
+                        absoluteEpisodeNumber: absoluteEpisodeNumber,
                         hasImage: !!ep.img,
                     }
                 }
