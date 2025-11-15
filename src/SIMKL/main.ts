@@ -21,6 +21,7 @@ class Provider implements CustomSource {
         const cachedResults: $app.AL_BaseAnime[] = []
 
         for (const id of ids) {
+            // devnote: using cache from listAnime breaks things
             // const cached = mediaCache?.[id]
             // if (cached) {
             //     cachedResults.push(cached)
@@ -230,7 +231,7 @@ class Provider implements CustomSource {
                     const episodeNumber = Number(ep.episode) || 1
                     const season = ep.season || 1
                     const isSpecial = ep.type === "special"
-                    if (isSpecial) specialCount++
+                    if (isSpecial) continue
 
                     // Calculate absolute episode number by adding season offset
                     const seasonOffset = isSpecial ? 0 : (seasonOffsets[season] || 0)
