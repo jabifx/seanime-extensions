@@ -241,7 +241,6 @@ Do not check for updates|No buscar actualizaciones|Ne pas vérifier les mises à
 If enabled, Seanime will not check for new releases.|Si está activado, Seanime no buscará nuevas actualizaciones.|Si activé, Seanime ne vérifiera pas les nouvelles versions.|Se abilitato, Seanime non controllerà nuove release.|Wenn aktiviert, sucht Seanime nicht nach neuen Versionen.|Indien ingeschakeld, controleert Seanime niet op nieuwe releases.|Se ativado, Seanime não verificará novos lançamentos.|有効にすると、Seanimeは新しいリリースを確認しません。|활성화하면 Seanime가 새 릴리스를 확인하지 않습니다.|启用后，Seanime不会检查新版本|若啟用，Seanime 將不會檢查新版本。|Aye, Seanime won't be checkin' the horizon for new landfalls.|If enabwed, Seanime wiww not chek fow new weweases.|Iɟ ǝuɐqlǝp' Sǝɐuᴉɯǝ ʍᴉll uoʇ ɔɥǝɔʞ ɟoɹ uǝʍ ɹǝlǝɐsǝs˙|If permitted, Seanime shall not seek tidings of new unveilings.|QWERTY HeHmey
 Keyboard shortcuts|Atajos de teclado|Raccourcis clavier|Scorciatoie da tastiera|Tastenkombinationen|Sneltoetsen|Atalhos de teclado|キーボードショートカット|키보드 단축키|键盘快捷键|鍵盤快捷鍵|Captain's Commands|Keyboawd showtcuts|Kǝʎqoɐɹp sɥoɹʇɔnʇs|Swift commands of the fingers|ghunghwI' 'ay' 'el
 Open command palette|Abrir paleta de comandos|Ouvrir la palette de commandes|Apri la palette dei comandi|Befehlspalette öffnen|Commandopalet openen|Abrir paleta de comandos|コマンドパレットを開く|명령 팔레트 열기|打开命令面板|開啟指令面板|Open the command chest|Open command pawette|Odǝu ɔoɯɯɐup dɐlǝʇʇǝ|Open the herald's slate|joq
-or|o|ou|o|oder|of|o|ou|o|または|或|or|ow|oɹ|or|Dujvo' URL 'el
 Open torrent client on startup|Abrir cliente torrent al iniciar|Ouvrir le client torrent au démarrage|Apri client torrent all'avvio|Torrent-Client beim Start öffnen|Torrent-client openen bij opstarten|Abrir cliente torrent na inicialização|起動時にTorrentクライアントを開く|시작 시 토렌트 클라이언트 열기|启动时打开 torrent 客户端|啟動時開啟種子客戶端|Open the plunderin' machine at sunrise|Open towwent cwient on stawtup|Odǝu ʇoɹɹǝuʇ ɔlᴉǝuʇ ou sʇɐɹʇnd|Open the dispatcher of parcels upon the awakening|Duj naHmey mev.
 Open localhost web URL on startup|Abrir URL local al iniciar|Ouvrir l'URL locale au démarrage|Apri URL locale all'avvio|Lokale Web-URL beim Start öffnen|Lokale web-URL openen bij opstarten|Abrir URL local na inicialização|起動時にローカルホストURLを開く|시작 시 로컬호스트 웹 URL 열기|启动时打开本地主机 URL|啟動時開啟本地主機網址|Open the ship's own web chart at sunrise|Open wocawhost web URL on stawtup|Odǝu loɔɐlɥosʇ ʍǝq UR˥ ou sʇɐɹʇnd|Open the local host's web address upon the awakening|Auto Downloader naHmey mev.
 Disable system notifications|Desactivar notificaciones del sistema|Désactiver les notifications système|Disattiva notifiche di sistema|Systembenachrichtigungen deaktivieren|Systeemmeldingen uitschakelen|Desativar notificações do sistema|システム通知を無効にする|시스템 알림 비활성화|禁用系统通知|停用系統通知|Silence the ship's bell|Disabwe system notifications|Dᴉsɐqlǝ sʎsʇǝɯ uoʇᴉɟᴉɔɐʇᴉous|Silence the missives from the engine|Auto Scanner naHmey mev.
@@ -560,7 +559,6 @@ Enabling host mode does not automatically set up remote access; you must manuall
 Show total size|Mostrar tamaño total|Afficher la taille totale|Mostra dimensione totale|Gesamtgröße anzeigen|Totale grootte tonen|Mostrar tamanho total|合計サイズを表示|총 크기 표시|显示总大小|顯示總大小|Show the whole haul|Show totaw size|Sɥoʍ ʇoʇɐl sᴉzǝ|Show the total sum|Dache'lIj lI'be'.
 Upcoming episodes|Próximos episodios|Épisodes à venir|Episodi in arrivo|Bevorstehende Episoden|Aankomende afleveringen|Próximos episódios|今後のエピソード|다가오는 에피소드|即将播出的剧集|即將播出的劇集|Tales on the horizon|Upcoming epawsodes|Udɔoɯᴉuƃ ǝdᴉsopǝs|Forthcoming chapters|nIm'e'mey yotbe'.
 My lists|Mis listas|Mes listes|Le mie liste|Meine Listen|Mijn lijsten|Minhas listas|マイリスト|내 목록|我的列表|我的清單|Me Logs|Mai wists|Wʎ lᴉsʇs|Mine Rolls|yot' DI'lIjDaq 'nIm'e'mey SIQ.
-Watching|Viendo|En cours de visionnage|Guardando|Am Anschauen|Aan het kijken|Assistindo|視聴中|시청 중|正在观看|正在觀看|Gazin' Upon|Watching|Mɐʇɔɥᴉuƃ|Beholding|Dache' ghunghwI'mey
 Your home screen is empty|Tu pantalla de inicio está vacía|Votre écran d’accueil est vide|La tua schermata iniziale è vuota|Dein Startbildschirm ist leer|Je startscherm is leeg|Sua tela inicial está vazia|ホーム画面が空です|홈 화면이 비어 있습니다|你的主屏幕是空的|你的主畫面是空的|Yer captain's cabin is barren|Ur home scween iz empty ;-;|⅄onɹ ɥoɯǝ sɔɹǝǝu ᴉs ǝɯdʇʎ|Thine antechamber is barren|yot' DI'lIjvo' Hoch 'nIm'e' Dache'vo' lo'choH.
 No series are currently being watched|No se está viendo ninguna serie|Aucune série n’est actuellement regardée|Nessuna serie è attualmente in visione|Derzeit wird keine Serie angesehen|Er worden momenteel geen series bekeken|Nenhuma série está sendo assistida atualmente|現在視聴中のシリーズはありません|현재 시청 중인 시리즈가 없습니다|当前没有正在观看的剧集|目前沒有正在觀看的劇集|No tales be currently gazed upon|No sewies awe cuwwentwy being watched|No sǝɹᴉǝs ɐɹǝ ɔnɹɹǝuʇlʎ qǝᴉuƃ ʍɐʇɔɥǝp|No series are presently being beheld|De'mey
 Add series to your 'Currently watching' list to get started|Añade series a tu lista de “Viendo actualmente” para comenzar|Ajoutez des séries à votre liste « En cours de visionnage » pour commencer|Aggiungi serie alla tua lista “Attualmente guardando” per iniziare|Aktualisiere deine Liste „Derzeit ansehen“, um zu starten|Voeg series toe aan je 'Momenteel aan het kijken'-lijst om te beginnen|Adicione séries à sua lista “Assistindo atualmente” para começar|「視聴中」リストにシリーズを追加して開始します|‘현재 시청 중’ 목록에 시리즈를 추가하여 시작하세요|将剧集添加到“正在观看”列表以开始|將影集加入「正在觀看」清單以開始|Add tales to yer 'Currently Gazin' Upon' log to get started|Add sewies to ur 'Cuwwentwy watching' wist to get stawted owo|∀pp sǝɹᴉǝs ʇo ʎonɹ ,Ɔnɹɹǝuʇlʎ ʍɐʇɔɥᴉuƃ, lᴉsʇ ʇo ƃǝʇ sʇɐɹʇǝp|Add series to thy 'Presently Beholding' roll to commence|latlhDI' pach (Hoch)
@@ -700,8 +698,6 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
             const existing = await ctx.dom.queryOne('script[data-ui-translator]');
             if (existing) {
                 console.log("⚠️ Cleaning past translator...");
-                // NO INTENTES ACCEDER A window AQUÍ - Eso es código del servidor, no del navegador
-                // El script inyectado se limpiará solo
                 await existing.remove();
             }
 
@@ -709,7 +705,6 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
             const scriptContent = `
                 (function() {
                     try {                        
-                        // Limpiar traductor anterior (ESTO SÍ está dentro del navegador)
                         if (window.__uiTranslatorObserver && typeof window.__uiTranslatorObserver.disconnect === 'function') {
                             try { 
                                 window.__uiTranslatorObserver.disconnect(); 
@@ -797,6 +792,8 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
             
                         function translateNode(node) {
                             if (node.nodeType === Node.ELEMENT_NODE) {
+                               if (node.nodeName === 'OPTION') return;
+                                
                                 const textNodes = [];
                                 for (let child of node.childNodes) {
                                     if (child.nodeType === Node.TEXT_NODE && child.textContent.trim()) {
@@ -807,9 +804,9 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
                                 if (textNodes.length > 1) {
                                     const combinedText = textNodes.map(n => n.textContent).join('');
                                     const normalized = normalizeText(combinedText);
-                                    
+                                
                                     if (normalized && normalized.length <= MAX_TEXT_LENGTH) {
-                                        // Intentar traducción con patrón primero
+                                
                                         for (const lang of Object.keys(translations)) {
                                             if (lang === targetLang) continue;
                                             const patternResult = translateWithPattern(
@@ -818,48 +815,28 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
                                                 translations[targetLang]
                                             );
                                             if (patternResult) {
-                                                // Reemplazar todos los nodos de texto con el resultado
                                                 textNodes[0].textContent = patternResult;
-                                                for (let i = 1; i < textNodes.length; i++) {
-                                                    textNodes[i].textContent = '';
-                                                }
                                                 return;
                                             }
                                         }
-                                        
+                                
                                         const fromLang = detectLanguage(normalized);
                                         if (fromLang && translations[targetLang]) {
                                             const keys = Object.keys(translations[fromLang]).sort((a, b) => b.length - a.length);
                                             for (const key of keys) {
                                                 if (normalizeText(translations[fromLang][key]) === normalized) {
-                                                    let newText = translations[targetLang][key] || translations[fromLang][key];
-                                                    
-                                                    const keyIsEpisode = String(key).trim().toLowerCase() === "episode";
-                                                    const srcIsEpisode = normalizeText(translations[fromLang][key]) === "episode";
-                                                    const tgtIsEpisode = normalizeText(newText) === "episode";
-                                                    if (keyIsEpisode || srcIsEpisode || tgtIsEpisode) {
-                                                        newText = " " + newText + " ";
-                                                    }
-                                                    
+                                                    const newText = translations[targetLang][key] || translations[fromLang][key];
                                                     textNodes[0].textContent = newText;
-                                                    for (let i = 1; i < textNodes.length; i++) {
-                                                        textNodes[i].textContent = '';
-                                                    }
-                                                    
-                                                    if ((keyIsEpisode || srcIsEpisode || tgtIsEpisode) && textNodes[textNodes.length - 1].nextSibling) {
-                                                        const next = textNodes[textNodes.length - 1].nextSibling;
-                                                        if (next.nodeType === Node.TEXT_NODE && next.textContent.trim() === "s") {
-                                                            next.textContent = "";
-                                                        }
-                                                    }
                                                     return;
                                                 }
                                             }
                                         }
                                     }
+                                
+                                    // ← evitar que los nodos individuales se procesen
+                                    return;
                                 }
                                 
-                                // Procesar atributos
                                 ["placeholder", "title", "alt", "aria-label", "value"].forEach(attr => {
                                     const val = node.getAttribute(attr);
                                     if (val) {
@@ -905,9 +882,11 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
                             // Procesar nodos de texto individuales
                             if (node.nodeType === Node.TEXT_NODE) {
                                 const text = node.textContent;
+
                                 if (!text || !text.trim()) return;
                                 const normalized = normalizeText(text);
                                 if (!normalized || normalized.length > MAX_TEXT_LENGTH) return;
+
                         
                                 // PRIMERO: Intentar traducción con patrón en todos los idiomas
                                 for (const lang of Object.keys(translations)) {
@@ -931,22 +910,7 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
                                         if (!translations[fromLang] || !translations[fromLang][key]) continue;
                                         if (normalizeText(translations[fromLang][key]) === normalized) {
                                             let newText = (translations[targetLang] && translations[targetLang][key]) ? translations[targetLang][key] : translations[fromLang][key];
-                                    
-                                            const keyIsEpisode = String(key).trim().toLowerCase() === "episode";
-                                            const srcIsEpisode = normalizeText(translations[fromLang][key]) === "episode";
-                                            const tgtIsEpisode = normalizeText(newText) === "episode";
-                                            if (keyIsEpisode || srcIsEpisode || tgtIsEpisode) {
-                                                newText = " " + newText + " ";
-                                            }
                                             node.textContent = newText;
-                        
-                                            if ((keyIsEpisode || srcIsEpisode || tgtIsEpisode) && node.nextSibling) {
-                                                const next = node.nextSibling;
-                                                if (next.nodeType === Node.TEXT_NODE && next.textContent.trim() === "s") {
-                                                    next.textContent = "";
-                                                }
-                                            }
-                                            
                                             break;
                                         }
                                     }
