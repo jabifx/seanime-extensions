@@ -1,5 +1,3 @@
-/// <reference path="./manga-provider.d.ts" />
-
 class Provider implements CustomSource {
     api_key = "{{api-key}}"
 
@@ -10,139 +8,271 @@ class Provider implements CustomSource {
         }
     }
 
-    async getAnime(ids: number[]): Promise<AL_BaseAnime[]> {
-        const media = $store.get("simkl.media") as Record<number, AL_BaseAnime>;
-        const ret: AL_BaseAnime[] = [];
+    async getAnime(ids: number[]): Promise<$app.AL_BaseAnime[]> {
+        const ret: $app.AL_BaseAnime[] = []
+        const mediaCache = $store.get("simkl.media") as Record<number, $app.AL_BaseAnime> | undefined || {}
 
-        for (const id of ids) {
-            const found = media?.[id];
-            if (found) ret.push(found);
+        const headers = {
+            "Content-Type": "application/json",
+            "simkl-api-key": this.api_key,
         }
 
-        return ret;
+        const idsToFetch: number[] = []
+        const cachedResults: $app.AL_BaseAnime[] = []
+
+        for (const id of ids) {
+            const cached = mediaCache?.[id]
+            if (cached) {
+                cachedResults.push(cached)
+            } else {
+                idsToFetch.push(id)
+            }
+        }
+
+        if (idsToFetch.length > 0) {
+            const fetchPromises = idsToFetch.map(async (id) => {
+                if (!id) return null
+                const types: ("anime" | "tv" | "movie")[] = ["tv", "anime", "movie"]
+
+                let metadata: $app.Metadata_AnimeMetadata | null = null
+                // fetch metadata if only one query
+                if (idsToFetch.length === 1) {
+                    metadata = (await this.getAnimeMetadata(id)) || null
+                }
+
+                for (const typeSimkl of types) {
+                    const endpoint = `https://api.simkl.com/${typeSimkl}/${id}?extended=full&client_id=${this.api_key}`
+
+                    try {
+                        const res = await fetch(endpoint, { headers })
+                        if (!res.ok) continue // try next
+
+                        const item = res.json<SimklItem>()
+                        if (!item || !item.ids) continue // try next
+
+                        const posterPath = item.poster ? `https://simkl.in/posters/${item.poster}_` : ""
+                        const title = item.title ?? ""
+
+                        let nextAiringEpisodeMetadata: $app.Metadata_EpisodeMetadata | null = null
+                        for (const ep of Object.values(metadata?.episodes ?? {})) {
+                            if (!ep.airDate) continue
+                            const airDate = new Date(ep.airDate)
+                            const now = new Date()
+                            if (airDate > now) {
+                                nextAiringEpisodeMetadata = ep
+                                break
+                            }
+                        }
+
+
+                        const base: $app.AL_BaseAnime = {
+                            id: item.ids.simkl,
+                            siteUrl: "https://simkl.com",
+                            title: {
+                                userPreferred: title,
+                                romaji: title,
+                                english: item.en_title ?? title,
+                                native: title,
+                            },
+                            coverImage: {
+                                large: !!posterPath ? posterPath + "m.webp" : "",
+                                medium: !!posterPath ? posterPath + "m.webp" : "",
+                                extraLarge: !!posterPath ? posterPath + "m.webp" : "",
+                                color: "",
+                            },
+                            bannerImage: !!posterPath ? posterPath + "w.jpg" : "",
+                            description: item.overview ?? "",
+                            genres: item.genres ?? [],
+                            meanScore: item.ratings?.simkl?.rating ? Math.round(item.ratings.simkl.rating * 10) : 0,
+                            synonyms: (item as any)?.all_titles || [],
+                            status: this._toStatus(item.status),
+                            episodes: item.total_episodes || 1,
+                            type: "ANIME",
+                            format: "TV",
+                            seasonYear: item.year,
+                            isAdult: (item as any).adult ?? false,
+                            startDate: this._parseDate(item.first_aired, item.year),
+                            endDate: undefined,
+                            nextAiringEpisode: !nextAiringEpisodeMetadata ? undefined : {
+                                episode: nextAiringEpisodeMetadata.episodeNumber,
+                                airingAt: new Date(nextAiringEpisodeMetadata.airDate).getTime(),
+                                timeUntilAiring: Math.floor((new Date(nextAiringEpisodeMetadata.airDate).getTime() - Date.now()) / 1000),
+                            },
+                        }
+
+                        return base
+                    }
+                    catch (err) {
+
+                    }
+                }
+
+                // nothing found
+                return null
+            })
+
+            const fetchedResults = await Promise.all(fetchPromises)
+
+            // update cache
+            const updatedCache = { ...mediaCache }
+
+            for (const result of fetchedResults) {
+                if (result) {
+                    updatedCache[result.id] = result
+                    ret.push(result)
+                }
+            }
+
+            $store.set("simkl.media", updatedCache)
+        }
+
+        ret.push(...cachedResults)
+
+        return ret
     }
 
     async getAnimeDetails(id: number): Promise<$app.AL_AnimeDetailsById_Media | null> {
         return null
     }
 
-    private parseDate(dateStr?: string) {
-        if (!dateStr) return undefined;
-        const d = new Date(dateStr);
+    private _parseDate(dateStr: string | undefined, year: number) {
+        if (!dateStr) return { year: year, month: undefined, day: undefined }
+        const d = new Date(dateStr)
         return {
             year: d.getUTCFullYear(),
             month: d.getUTCMonth() + 1,
             day: d.getUTCDate(),
-        };
+        }
     }
 
-    async getAnimeMetadata(id: number): Promise<Metadata_AnimeMetadata | null> {
-        const typeMap = $store.get('simkl.typeMap') as Record<number, 'anime' | 'tv' | 'movie'> | undefined;
-        const mediaCache = $store.get('simkl.media') as Record<number, AL_BaseAnime> | undefined;
+    private _toStatus(status: string) {
+        if (!status) return "FINISHED"
+        const s = status.toUpperCase()
+        if (s === "AIRING") return "RELEASING"
+        if (s === "TBA") return "NOT_YET_RELEASED"
+        return "FINISHED"
+    }
 
-        const typeSimkl = typeMap?.[id] ?? 'anime';
+    async getAnimeMetadata(id: number): Promise<$app.Metadata_AnimeMetadata | null> {
+        const mediaCache = $store.get("simkl.media") as Record<number, $app.AL_BaseAnime> | undefined
+        const metadataCache = $store.get("simkl.metadata") as Record<number, $app.Metadata_AnimeMetadata> | undefined
 
-        if (typeSimkl === 'movie') {
-            const cachedTitle = mediaCache?.[id]?.title;
-            return {
-                titles: { en: cachedTitle?.english ?? cachedTitle?.native ?? 'Movie' },
-                episodes: {
-                    '1': {
+        const cachedMetadata = metadataCache?.[id]
+        if (cachedMetadata) return cachedMetadata
+
+        const cachedTitle = mediaCache?.[id]?.title
+
+        const types: ("anime" | "tv" | "movie")[] = ["tv", "anime", "movie"]
+
+        for (const typeSimkl of types) {
+            if (typeSimkl === "movie") {
+                const metadata: $app.Metadata_AnimeMetadata = {
+                    titles: { en: cachedTitle?.english ?? cachedTitle?.native ?? "Movie" },
+                    episodes: {
+                        "1": {
+                            anidbId: 0,
+                            tvdbId: 0,
+                            anidbEid: 0,
+                            title: cachedTitle?.english ?? cachedTitle?.native ?? "Movie",
+                            image: "",
+                            airDate: "",
+                            length: 90,
+                            summary: "",
+                            overview: "",
+                            episodeNumber: 1,
+                            episode: "1",
+                            seasonNumber: 1,
+                            absoluteEpisodeNumber: 1,
+                            hasImage: false,
+                        },
+                    },
+                    episodeCount: 1,
+                    specialCount: 0,
+                }
+
+                $store.set("simkl.metadata", { ...metadataCache, [id]: metadata })
+                return metadata
+            }
+
+
+            const endpoint = `https://api.simkl.com/${typeSimkl}/episodes/${id}?extended=full&client_id=${this.api_key}`
+
+            try {
+                const res = await fetch(endpoint, { headers: { "Content-Type": "application/json" } })
+                if (!res.ok) continue // try next
+
+                const data = await res.json()
+                if (!Array.isArray(data)) continue // try next
+
+                const episodes: Record<string, $app.Metadata_EpisodeMetadata> = {}
+                let specialCount = 0
+
+                for (const ep of data) {
+                    const episodeNumber = Number(ep.episode) || Object.keys(episodes).length + 1
+                    const isSpecial = ep.type === "special"
+                    if (isSpecial) specialCount++
+
+                    const image = ep.img ? `https://simkl.in/episodes/${ep.img}_w.jpg` : ""
+
+                    if(!ep.aired) continue
+
+                    episodes[episodeNumber.toString()] = {
                         anidbId: 0,
                         tvdbId: 0,
                         anidbEid: 0,
-                        title: cachedTitle?.english ?? cachedTitle?.native ?? 'Movie',
-                        image: '',
-                        airDate: null,
-                        length: 90,
-                        summary: '',
-                        overview: '',
-                        episodeNumber: 1,
-                        episode: '1',
+                        title: ep.title ?? `Episode ${episodeNumber}`,
+                        image: image,
+                        airDate: new Date(ep.date).toISOString().split("T")[0],
+                        length: 0,
+                        summary: ep.description ?? "",
+                        overview: ep.description ?? "",
+                        episodeNumber: episodeNumber,
+                        episode: episodeNumber.toString(),
                         seasonNumber: 1,
-                        absoluteEpisodeNumber: 1,
-                        hasImage: false,
-                    },
-                },
-                episodeCount: 1,
-                specialCount: 0,
-            };
-        }
+                        absoluteEpisodeNumber: episodeNumber,
+                        hasImage: !!ep.img,
+                    }
+                }
 
-        const endpoint = `https://api.simkl.com/${typeSimkl}/episodes/${id}?client_id=${this.api_key}`;
+                const orderedEpisodes = Object.fromEntries(
+                    Object.entries(episodes).sort(([, a], [, b]) => (a.episodeNumber ?? 0) - (b.episodeNumber ?? 0)),
+                )
 
-        try {
-            const res = await fetch(endpoint, { headers: { 'Content-Type': 'application/json' } });
-            if (!res.ok) return null;
-
-            const data = await res.json();
-            if (!Array.isArray(data)) return null;
-
-            const episodes: Record<string, Metadata_EpisodeMetadata> = {};
-            let specialCount = 0;
-
-            for (const ep of data) {
-                const episodeNumber = Number(ep.episode) || Object.keys(episodes).length + 1;
-                const isSpecial = ep.type === 'special';
-                if (isSpecial) specialCount++;
-
-                const image = ep.img ? `https://simkl.in/episodes/${ep.img}_w.jpg` : '';
-
-                episodes[episodeNumber.toString()] = {
-                    anidbId: 0,
-                    tvdbId: 0,
-                    anidbEid: 0,
-                    title: ep.title ?? `Episode ${episodeNumber}`,
-                    image: image,
-                    airDate: this.parseDate(ep.date),
-                    length: 24,
-                    summary: ep.description ?? '',
-                    overview: ep.description ?? '',
-                    episodeNumber: episodeNumber,
-                    episode: episodeNumber.toString(),
-                    seasonNumber: 1,
-                    absoluteEpisodeNumber: episodeNumber,
-                    hasImage: !!ep.img,
-                };
+                const metadata = {
+                    titles: { en: cachedTitle?.english ?? cachedTitle?.native ?? "" },
+                    episodes: orderedEpisodes,
+                    episodeCount: Object.values(orderedEpisodes)
+                        .filter(e => e && e.title && !e.title.toLowerCase().includes("special")).length,
+                    specialCount: specialCount,
+                }
+                $store.set("simkl.metadata", { ...metadataCache, [id]: metadata })
+                return metadata
             }
-
-            const cachedTitle = mediaCache?.[id]?.title;
-
-            const orderedEpisodes = Object.fromEntries(
-                Object.entries(episodes).sort(([, a], [, b]) => (a.episodeNumber ?? 0) - (b.episodeNumber ?? 0))
-            );
-
-            return {
-                titles: { en: cachedTitle?.english ?? cachedTitle?.native },
-                episodes: orderedEpisodes,
-                episodeCount: Object.values(orderedEpisodes)
-                    .filter(e => e && e.title && !e.title.toLowerCase().includes('special')).length,
-                specialCount,
-            };
-        } catch (err) {
-            console.error(`Error fetching metadata for ${id}:`, err);
-            return null;
+            catch (err) {
+            }
         }
+
+        return null
     }
 
     async getAnimeWithRelations(id: number): Promise<$app.AL_CompleteAnime> {
-        const media = $store.get("simkl.media") as Record<number, $app.AL_CompleteAnime>;
-        const cached = media?.[id];
-        if (!cached) throw new Error("not found.");
+        const media = $store.get("simkl.media") as Record<number, $app.AL_CompleteAnime>
+        const cached = media?.[id]
+        if (!cached) throw new Error("not found.")
 
         return {
             ...cached,
             relations: { edges: [] },
-        };
+        }
     }
 
-    async listAnime(search: string, page: number, perPage: number): Promise<ListResponse<AL_BaseAnime>> {
-        const offset = (page - 1) * perPage;
+    async listAnime(search: string, page: number, perPage: number): Promise<ListResponse<$app.AL_BaseAnime>> {
+        const offset = (page - 1) * perPage
 
         const headers = {
             "Content-Type": "application/json",
             "simkl-api-key": this.api_key,
-        };
+        }
 
         const endpoints =
             search.trim() === ""
@@ -152,7 +282,7 @@ class Provider implements CustomSource {
                         typeSimkl: "anime",
                     },
                 ]
-                :[
+                : [
                     {
                         url: `https://api.simkl.com/search/anime?q=${encodeURIComponent(search)}&page=${page}&limit=${perPage}&extended=full&client_id=${this.api_key}`,
                         typeSimkl: "anime",
@@ -165,71 +295,151 @@ class Provider implements CustomSource {
                         url: `https://api.simkl.com/search/movie?q=${encodeURIComponent(search)}&page=${page}&limit=${perPage}&extended=full&client_id=${this.api_key}`,
                         typeSimkl: "movie",
                     },
-                ];
+                ]
 
         const responses = await Promise.all(
             endpoints.map(async (entry) => {
                 try {
-                    const r = await fetch(entry.url, { headers });
-                    if (!r.ok) return [];
-                    const json = await r.json();
-                    if (!Array.isArray(json)) return [];
-                    return json.map((j: any) => ({ ...j, _typeSimkl: entry.typeSimkl }));
-                } catch {
-                    return [];
+                    const r = await fetch(entry.url, { headers })
+                    if (!r.ok) return []
+                    const json = r.json<SimklSearchResult[]>()
+                    if (!Array.isArray(json)) return []
+                    return json.map((j) => ({ ...j, _typeSimkl: entry.typeSimkl }))
                 }
-            })
-        );
+                catch {
+                    return []
+                }
+            }),
+        )
 
-        const allResults = responses.flat().filter((x: any) => x && x.ids);
+        const allResults = responses.flat().filter((x) => x && x.ids)
 
-        const typeStore: Record<number, "anime" | "tv" | "movie"> = {};
-        const media: AL_BaseAnime[] = allResults.map((item: any) => {
-            const posterPath = item.poster ? `https://simkl.in/posters/${item.poster}_` : "";
-            const title = item.title ?? item.show_title ?? item.movie_title ?? "";
+        const media: $app.AL_BaseAnime[] = allResults.map((item) => {
+            const posterPath = item.poster ? `https://simkl.in/posters/${item.poster}_` : ""
+            const title = item.title ?? ""
 
-            const base: AL_BaseAnime = {
+            const base: $app.AL_BaseAnime = {
                 id: item.ids.simkl_id,
-                siteUrl: "https://simkl.com/" + item.url,
+                siteUrl: "https://simkl.com",
                 title: {
                     userPreferred: title,
                     romaji: title,
-                    english: item.english_title ?? title,
+                    english: item.title_en ?? title,
                     native: title,
                 },
                 coverImage: {
-                    large: posterPath + "m.jpg",
-                    medium: posterPath + "m.jpg",
-                    extraLarge: posterPath + "m.jpg",
+                    large: !!posterPath ? posterPath + "m.webp" : "",
+                    medium: !!posterPath ? posterPath + "m.webp" : "",
+                    extraLarge: !!posterPath ? posterPath + "m.webp" : "",
                     color: "",
                 },
-                description: item.overview ?? "",
-                genres: item.genres ?? [],
+                bannerImage: !!posterPath ? posterPath + "w.jpg" : "",
+                description: undefined,
+                genres: [],
                 meanScore: item.ratings?.simkl?.rating ? Math.round(item.ratings.simkl.rating * 10) : 0,
                 synonyms: item?.all_titles || [],
-                status: item.status?.toUpperCase() ?? "FINISHED",
-                bannerImage: posterPath + "w.jpg",
-                episodes: item.total_episodes || item.ep_count || 1,
+                status: this._toStatus(item.status),
+                episodes: item.ep_count || 1,
                 type: "ANIME",
-                format: item.anime_type?.toUpperCase() || item.type?.toUpperCase() || "TV",
+                format: "TV",
                 seasonYear: item.year,
-                isAdult: item.adult ?? false,
-                startDate: { year: item.year, month: 1, day: 1 },
-                endDate: { year: item.year, month: 1, day: 1 },
-            };
+                isAdult: (item as any).adult ?? false,
+                startDate: this._parseDate(undefined, item.year),
+                endDate: undefined,
+            }
 
-            typeStore[base.id] = item._typeSimkl;
-            return base;
-        });
+            return base
+        })
 
-        $store.set("simkl.media", Object.fromEntries(media.map((m) => [m.id, m])));
-        $store.set("simkl.typeMap", typeStore);
+        $store.set("simkl.media", Object.fromEntries(media.map((m) => [m.id, m])))
 
         return {
             media: media,
             total: media.length,
             page: page,
             totalPages: Math.ceil(media.length / perPage) || 1,
-        };
+        }
     }
+
+    async getManga(ids: number[]): Promise<$app.AL_BaseManga[]> {
+        return Promise.resolve([])
+    }
+
+    async getMangaDetails(id: number): Promise<$app.AL_MangaDetailsById_Media | null> {
+        return null
+    }
+
+    async listManga(search: string, page: number, perPage: number): Promise<ListResponse<$app.AL_BaseManga>> {
+        return { media: [], total: 0, page: 1, totalPages: 1 }
+    }
+}
+
+export interface SimklItem {
+    title: string;
+    en_title: string | null;
+    year: number;
+    type: "show" | "movie" | string;
+    ids: SimklIds;
+    rank: number;
+    poster: string;
+    fanart: string;
+    first_aired: string; // ISO date
+    airs: SimklAirs;
+    runtime: number;
+    certification: string;
+    overview: string;
+    genres: string[];
+    country: string;
+    total_episodes: number;
+    status: "ended" | "tba" | "airing"
+    network: string;
+    ratings: SimklRatings;
+    trailers: null | any;
+}
+
+export interface SimklSearchResult {
+    title: string;
+    title_en?: string;
+    title_romaji?: string;
+    year: number;
+    endpoint_type: "anime" | "movie" | "show" | string;
+    type: string;
+    poster: string;
+    all_titles: string[];
+    url: string;
+    ep_count?: number;
+    rank: number;
+    status: string;
+    ratings: SimklRatings;
+    ids: SimklSearchIds;
+}
+
+export interface SimklSearchIds {
+    simkl_id: number;
+    slug: string;
+}
+
+export interface SimklIds {
+    simkl: number;
+    slug: string;
+    tvdb?: string;
+    imdb?: string;
+    zap2it?: string;
+}
+
+export interface SimklAirs {
+    day: string;
+    time: string;
+    timezone: string;
+}
+
+export interface SimklRatings {
+    simkl?: SimklRatingSource;
+    imdb?: SimklRatingSource;
+    mal?: SimklRatingSource;
+}
+
+export interface SimklRatingSource {
+    rating: number;
+    votes: number;
 }
