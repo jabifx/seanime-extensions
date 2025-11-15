@@ -815,6 +815,11 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
                                                 translations[targetLang]
                                             );
                                             if (patternResult) {
+                                                // limpiar todos los nodos
+                                                for (let i = 0; i < textNodes.length; i++) {
+                                                    textNodes[i].textContent = "";
+                                                }
+                                                // dejar solo el traducido en el primero
                                                 textNodes[0].textContent = patternResult;
                                                 return;
                                             }
@@ -826,6 +831,8 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
                                             for (const key of keys) {
                                                 if (normalizeText(translations[fromLang][key]) === normalized) {
                                                     const newText = translations[targetLang][key] || translations[fromLang][key];
+                                
+                                                    for (let i = 0; i < textNodes.length; i++) { textNodes[i].textContent = ""; }
                                                     textNodes[0].textContent = newText;
                                                     return;
                                                 }
@@ -833,7 +840,6 @@ in {0} days.|en {0} días.|dans {0} jours.|tra {0} giorni.|in {0} Tagen.|over {0
                                         }
                                     }
                                 
-                                    // ← evitar que los nodos individuales se procesen
                                     return;
                                 }
                                 
