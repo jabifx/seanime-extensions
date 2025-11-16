@@ -68,7 +68,9 @@ class Provider implements CustomSource {
 
                         const base: $app.AL_BaseAnime = {
                             id: item.ids.simkl,
-                            siteUrl: "https://simkl.com",
+                            siteUrl: item.ids?.slug
+                                ? `https://simkl.com/${typeSimkl}/${id}/${item.ids.slug}`
+                                : `https://simkl.com/${typeSimkl}/${id}`,
                             title: {
                                 userPreferred: title,
                                 romaji: title,
@@ -290,60 +292,41 @@ class Provider implements CustomSource {
     }
 
     async listAnime(search: string, page: number, perPage: number): Promise<ListResponse<$app.AL_BaseAnime>> {
-        const offset = (page - 1) * perPage
-
         const headers = {
             "Content-Type": "application/json",
             "simkl-api-key": this.api_key,
+        };
+
+        const types: ("anime" | "tv" | "movie")[] = ["anime", "tv", "movie"];
+
+        const fetchPromises: Promise<any[]>[] = [];
+        if (search.trim() === "") {
+            const url = `https://api.simkl.com/anime/trending/?extended=overview,metadata,tmdb,genres,trailer&client_id=${this.api_key}`;
+            fetchPromises.push(
+                fetch(url, { headers })
+                    .then(r => r.ok ? r.json() : [])
+                    .catch(() => [])
+            );
+        } else {
+            for (const t of types) {
+                const url = `https://api.simkl.com/search/${t}?q=${encodeURIComponent(search)}&page=${page}&limit=${perPage}&extended=full&client_id=${this.api_key}`;
+                fetchPromises.push(
+                    fetch(url, { headers })
+                        .then(r => r.ok ? r.json() : [])
+                        .catch(() => [])
+                );
+            }
         }
 
-        const endpoints =
-            search.trim() === ""
-                ? [
-                    {
-                        url: `https://api.simkl.com/anime/trending/?extended=overview,metadata,tmdb,genres,trailer&client_id=${this.api_key}`,
-                        typeSimkl: "anime",
-                    },
-                ]
-                : [
-                    {
-                        url: `https://api.simkl.com/search/anime?q=${encodeURIComponent(search)}&page=${page}&limit=${perPage}&extended=full&client_id=${this.api_key}`,
-                        typeSimkl: "anime",
-                    },
-                    {
-                        url: `https://api.simkl.com/search/tv?q=${encodeURIComponent(search)}&page=${page}&limit=${perPage}&extended=full&client_id=${this.api_key}`,
-                        typeSimkl: "tv",
-                    },
-                    {
-                        url: `https://api.simkl.com/search/movie?q=${encodeURIComponent(search)}&page=${page}&limit=${perPage}&extended=full&client_id=${this.api_key}`,
-                        typeSimkl: "movie",
-                    },
-                ]
+        const results = (await Promise.all(fetchPromises)).flat().filter(x => x && x.ids);
 
-        const responses = await Promise.all(
-            endpoints.map(async (entry) => {
-                try {
-                    const r = await fetch(entry.url, { headers })
-                    if (!r.ok) return []
-                    const json = r.json<SimklSearchResult[]>()
-                    if (!Array.isArray(json)) return []
-                    return json.map((j) => ({ ...j, _typeSimkl: entry.typeSimkl }))
-                }
-                catch {
-                    return []
-                }
-            }),
-        )
+        const media: $app.AL_BaseAnime[] = results.map((item) => {
+            const posterPath = item.poster ? `https://simkl.in/posters/${item.poster}_` : "";
+            const title = item.title ?? "";
 
-        const allResults = responses.flat().filter((x) => x && x.ids)
-
-        const media: $app.AL_BaseAnime[] = allResults.map((item) => {
-            const posterPath = item.poster ? `https://simkl.in/posters/${item.poster}_` : ""
-            const title = item.title ?? ""
-
-            const base: $app.AL_BaseAnime = {
+            return {
                 id: item.ids.simkl_id,
-                siteUrl: "https://simkl.com",
+                siteUrl: `https://simkl.com/`,
                 title: {
                     userPreferred: title,
                     romaji: title,
@@ -351,16 +334,16 @@ class Provider implements CustomSource {
                     native: title,
                 },
                 coverImage: {
-                    large: !!posterPath ? posterPath + "m.webp" : "",
-                    medium: !!posterPath ? posterPath + "m.webp" : "",
-                    extraLarge: !!posterPath ? posterPath + "m.webp" : "",
+                    large: posterPath ? posterPath + "m.webp" : "",
+                    medium: posterPath ? posterPath + "m.webp" : "",
+                    extraLarge: posterPath ? posterPath + "m.webp" : "",
                     color: "",
                 },
-                bannerImage: !!posterPath ? posterPath + "w.jpg" : "",
+                bannerImage: posterPath ? posterPath + "w.jpg" : "",
                 description: undefined,
                 genres: [],
                 meanScore: item.ratings?.simkl?.rating ? Math.round(item.ratings.simkl.rating * 10) : 0,
-                synonyms: item?.all_titles || [],
+                synonyms: item.all_titles || [],
                 status: this._toStatus(item.status),
                 episodes: item.ep_count || 1,
                 type: "ANIME",
@@ -369,20 +352,19 @@ class Provider implements CustomSource {
                 isAdult: (item as any).adult ?? false,
                 startDate: this._parseDate(undefined, item.year),
                 endDate: undefined,
-            }
+            };
+        });
 
-            return base
-        })
-
-        $store.set("simkl.media", Object.fromEntries(media.map((m) => [m.id, m])))
+        $store.set("simkl.media", Object.fromEntries(media.map((m) => [m.id, m])));
 
         return {
             media: media,
             total: media.length,
             page: page,
             totalPages: Math.ceil(media.length / perPage) || 1,
-        }
+        };
     }
+
 
     async getManga(ids: number[]): Promise<$app.AL_BaseManga[]> {
         return Promise.resolve([])
