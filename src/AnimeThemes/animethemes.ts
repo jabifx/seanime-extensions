@@ -119,6 +119,7 @@ function init() {
                     const INITIAL_VOLUME = ${settings.volume};
                     const MANUAL_MATCHES = ${JSON.stringify(settings.manualMatches)};
                     const existingPlayer = document.getElementById("anime-theme-player");
+                    let attemptedProviders = new Set();
                     if (existingPlayer) existingPlayer.remove();
                 
                     const style = document.createElement("style");
@@ -184,7 +185,7 @@ function init() {
                 
                     const showError = (message, fallbackProvider = null) => {
                         els.themesList.innerHTML = \`<div class="error">\${message}</div>\`;
-                        if (fallbackProvider) { setTimeout(() => fetchThemes(fallbackProvider), 1200) }
+                        if (fallbackProvider) { setTimeout(() => fetchThemes(fallbackProvider), 1200); }
                     };
                 
                     const updateManualMatchIndicator = () => {
@@ -535,15 +536,23 @@ function init() {
                     };
                 
                     const fetchThemes = async (providerOverride) => {
+                        const provider = providerOverride || PROVIDER;
+                        if (attemptedProviders.has(provider)) {
+                            showError(\`No themes found on any provider\`);
+                            return;
+                        }
+                        attemptedProviders.add(provider);
                         try {
-                            const provider = providerOverride || PROVIDER;
-                            const themes = provider === "animethemes" ? await fetchAnimeThemes() : await fetchAniSongDB("");
+                            const themes = provider === "animethemes" ? await fetchAnimeThemes() : await fetchAniSongDB();
+                    
+                            attemptedProviders.clear(); // éxito → reseteamos para próximas cargas
                             renderThemes(themes);
                         } catch (err) {
-                            console.error("Failed to fetch themes:", err);
-                            const fallback = PROVIDER === "animethemes" ? "anisongdb" : "animethemes";
-                            const message = \`Not found on \${PROVIDER === "animethemes" ? "AnimeThemes" : "AniSongDB"}, searching on \${fallback}...\`;
-                            showError(message, fallback);
+                            console.error(\`Failed on \${provider}:\`, err);
+                    
+                            const fallback = provider === "animethemes" ? "anisongdb" : "animethemes";
+                            if (!attemptedProviders.has(fallback)) { showError(\`Not found on \${provider === "animethemes" ? "AnimeThemes" : "AniSongDB"}, trying \${fallback}...\`, fallback);} 
+                            else { showError(\`No themes found on AnimeThemes.moe nor AniSongDB\`); }
                         }
                     };
                 
