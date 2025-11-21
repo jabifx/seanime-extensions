@@ -1,7 +1,7 @@
 {
   "id": "kagane-source",
   "name": "Kagane",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "manifestURI": "https://raw.githubusercontent.com/jabifx/seanime-extensions/master/src/KaganeSoruce/manifest.json",
   "language": "typescript",
   "type": "custom-source",

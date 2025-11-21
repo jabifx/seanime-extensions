@@ -176,15 +176,21 @@ class Provider implements CustomSource {
     }
 
     async listManga(search: string, page: number, perPage: number): Promise<ListResponse<$app.AL_BaseManga>> {
-        const res = await fetch(`${this.api}/search?page=${page - 1}&size=${perPage}&name=${encodeURIComponent(search)}`,
+        const res = await fetch(
+            `${this.api}/search?page=${page - 1}&size=${perPage}&name=${encodeURIComponent(
+                search
+            )}`,
             {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: "{}"
+                body: JSON.stringify({
+                    sources: [],
+                    content_rating: ["safe", "suggestive", "erotica", "pornographic"]
+                })
             }
-            );
+        );
         const json = await res.json();
 
         const idMap: Record<number, string> = $store.get("kagane") ?? {};
@@ -212,23 +218,19 @@ class Provider implements CustomSource {
                         /native|kor|jp|cn|han|中|日|韩/i.test(t.label)
                     )?.title
                 },
-
                 coverImage: {
                     large: `https://api.kagane.org/api/v1/series/${m.id}/thumbnail`,
                     medium: `https://api.kagane.org/api/v1/series/${m.id}/thumbnail`,
                     extraLarge: `https://api.kagane.org/api/v1/series/${m.id}/thumbnail`,
-                    color: undefined
+                    color: ""
                 },
-
                 description: m.summary,
                 isAdult: m.age_rating ? m.age_rating >= 18 : false,
-
                 startDate: {
                     year: start.getUTCFullYear(),
                     month: start.getUTCMonth() + 1,
                     day: start.getUTCDate()
                 },
-
                 endDate: {
                     year: now.getUTCFullYear(),
                     month: now.getUTCMonth() + 1,
